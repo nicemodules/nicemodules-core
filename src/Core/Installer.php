@@ -2,22 +2,24 @@
 
 namespace NiceModules\Core;
 
-use NiceModules;
 use Composer\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
+use NiceModules;
 use NiceModules\ORM\Mapper;
+use ReflectionException;
+use Symfony\Component\Console\Input\ArrayInput;
+use NiceModules\CoreModule\CoreModule;
 
 class Installer
 {
     /**
-     * TODO: composer install tests, implementation, usage 
+     * TODO: composer install tests, implementation, usage
      * @var string[]
      */
     protected array $models;
 
     public function installComposer()
     {
-        putenv('COMPOSER_HOME=' . NICEMODULES_CORE_DIR . '/vendor/bin/composer');
+        putenv('COMPOSER_HOME=' . CoreModule::instance()->getPluginDir() . '/vendor/bin/composer');
 
         $input = new ArrayInput(array('command' => 'install'));
         $application = new Application();
@@ -26,6 +28,14 @@ class Installer
     }
 
 
+    /**
+     * Install added models
+     * @throws NiceModules\ORM\Exceptions\AllowSchemaUpdateIsFalseException
+     * @throws NiceModules\ORM\Exceptions\RepositoryClassNotDefinedException
+     * @throws NiceModules\ORM\Exceptions\RequiredAnnotationMissingException
+     * @throws NiceModules\ORM\Exceptions\UnknownColumnTypeException
+     * @throws ReflectionException
+     */
     public function installDatabase()
     {
         foreach ($this->models as $model) {
@@ -34,6 +44,7 @@ class Installer
     }
 
     /**
+     * Add model update in the database 
      * @param string $model
      * @return Installer
      */
@@ -49,5 +60,26 @@ class Installer
     public function getModels(): array
     {
         return $this->models;
+    }
+
+    /**
+     * Write down the installation errors if they occur
+     */
+    public function logOutput()
+    {
+        $logFile = NiceModules\CoreModule\CoreModule::instance()->getLogDir() . DIRECTORY_SEPARATOR . 'install.log';
+
+        $logContent = ob_get_contents();
+        $logger = NiceModules\ORM\Logger::instance();
+
+        if (NiceModules\ORM\Logger::instance()->isEnabled()) {
+            $logContent .= PHP_EOL . 'ORM LOG ENABLED';
+            $logContent .= PHP_EOL . 'ORM LOG MESSAGES: ' . count($logger->getLog());
+            $logContent .= PHP_EOL . $logger->getLogString();
+        }
+
+        if (!empty($logContent)) {
+            file_put_contents($logFile, $logContent);
+        }
     }
 }

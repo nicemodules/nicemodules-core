@@ -2,10 +2,11 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\Core\Plugin\Resource;
+
 abstract class Plugin
 {
-    protected array $styleFiles = [];
-    protected array $javaScriptFiles = [];
+    protected array $resources = [];
     protected Router $router;
     protected ?string $content;
     protected Module $module;
@@ -27,6 +28,32 @@ abstract class Plugin
         return $this->content;
     }
 
+    /**
+     * @return Module
+     */
+    public function getModule(): Module
+    {
+        return $this->module;
+    }
+
+    /**
+     * @param Resource $resource
+     * @return Plugin
+     */
+    public function addResource(Resource $resource): Plugin
+    {
+        $this->resources[$resource->type][] = $resource;
+        return $this;
+    }
+
+    /**
+     * @return Resource[]
+     */
+    public function getResources(): array
+    {
+        return $this->resources;
+    }
+
     abstract protected function initializeRouter();
 
     public function getRouter(): Router
@@ -39,51 +66,33 @@ abstract class Plugin
         echo $this->content;
     }
 
-    /**
-     * @param string $styleUrl
-     */
-    public function addStyleFile(string $styleUrl): void
-    {
-        $this->styleFiles[] = $styleUrl;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getStyleFiles(): array
-    {
-        return $this->styleFiles;
-    }
-
-    /**
-     * @param string $javaScriptUrl
-     */
-    public function addJavaScriptFile(string $javaScriptUrl): void
-    {
-        $this->javaScriptFiles[] = $javaScriptUrl;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getJavaScriptFiles(): array
-    {
-        return $this->javaScriptFiles;
-    }
-
     public function attachFiles()
     {
-        $styles = $this->getStyleFiles();
-
-        foreach ($styles as $id => $file) {
-            wp_enqueue_style($this->module::CODE_NAME . '_style-' . $id, $file, [], $this->module::VERSION);
+        if (isset($this->resources[Resource::TYPE_CSS])) {
+            /** @var Resource $resource */
+            foreach ($this->resources[Resource::TYPE_CSS] as $id => $resource) {
+                wp_enqueue_style(
+                    $this->module::CODE_NAME . '_style-' . $id,
+                    $resource->file,
+                    [],
+                    $resource->addVersion ? $this->module::VERSION : null
+                );
+            }
         }
 
-        $scripts = $this->getJavaScriptFiles();
 
-        foreach ($scripts as $id => $file) {
-            wp_enqueue_script($this->module::CODE_NAME . '_script-' . $id, $file, [], $this->module::VERSION);
+        if (isset($this->resources[Resource::TYPE_JS])) {
+            /** @var Resource $resource */
+            foreach ($this->resources[Resource::TYPE_JS] as $id => $resource) {
+                wp_enqueue_script(
+                    $this->module::CODE_NAME . '_style-' . $id,
+                    $resource->file,
+                    [],
+                    $resource->addVersion ? $this->module::VERSION : null
+                );
+            }
         }
+
     }
 
 }

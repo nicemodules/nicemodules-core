@@ -1,8 +1,14 @@
 {
   "name": "nicemodules/core",
   "description": "NiceModules core plugin",
+  "keywords": [
+    "wordpress",
+    "framework",
+    "plugin",
+    "template"
+  ],
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "WTFPL",
   "authors": [
     {
       "name": "jedrek",

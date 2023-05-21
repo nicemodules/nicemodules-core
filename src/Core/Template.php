@@ -16,7 +16,7 @@ class Template
      */
     public function __construct(string $file, array $params = [])
     {
-        $this->templateDir = TEMPLATE_DIR;
+        $this->templateDir = Context::instance()->getActivePlugin()->getModule()->getTemplatesDir();
         $this->file = $file;
         $this->params = $params;
         $this->setParam('_template', $this);

@@ -1,6 +1,6 @@
 <?php
 
-namespace NiceModules\Model;
+namespace NiceModules\CoreModule\Model;
 
 use NiceModules\Core\Model;
 use NiceModules\ORM\Annotations\Column;
@@ -9,10 +9,14 @@ use NiceModules\ORM\Annotations\Table;
 
 /**
  * @Table(
- *     type = "Entity",
- *     name = "config",
+ *     type="Entity",
+ *     name="config",
  *     allow_schema_update = true,
- *     index = @Index(name="name_index", columns={"name"}),
+ *     indexes={
+ *      @Index(name="name_idx", columns={"name"}),
+ *      @Index(name="namespace_idx", columns={"namespace"})
+ *      },
+ *     repository="NiceModules\CoreModule\Repository\ConfigRepository",
  *     inherits="NiceModules\Core\Model"
  *     )
  */

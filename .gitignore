@@ -3,6 +3,7 @@
 !/src
 !/tests
 !/templates
+!/fonts
 !/bootstrap.php
 !/composer.json
 !/composer.lock

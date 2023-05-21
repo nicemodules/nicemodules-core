@@ -1,6 +1,10 @@
 <?php
 
-class LogRepository extends \NiceModules\ORM\Repositories\BaseRepository
+namespace NiceModules\CoreModule\Repository;
+
+use NiceModules\ORM\Repositories\BaseRepository;
+
+class LogRepository extends BaseRepository
 {
 
 }
