@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         bootstrap="tests/bootstrap.php"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true">
+    <coverage>
+        <report>
+            <text outputFile="php://stdout" showUncoveredFiles="true"/>
+        </report>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
+    <testsuites>
+        <testsuite name="NiceModules Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <logging/>
+    <php>
+        <const name="MODULE_DIR" value=""/>
+        <const name="DATA_DIR" value="data"/>
+        <const name="TEMPLATE_DIR" value="templates"/>
+
+    </php>
+</phpunit>

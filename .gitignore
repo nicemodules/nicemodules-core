@@ -1,0 +1,15 @@
+/*
+!/data/.htaccess
+!/src
+!/tests
+!/templates
+!/bootstrap.php
+!/composer.json
+!/composer.lock
+!/nicemodules-core.php
+!/phpunit.xml.dist
+!/README.md
+!/LICENCE.txt
+
+!/css
+!/js
