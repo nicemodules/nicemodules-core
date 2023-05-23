@@ -18,7 +18,8 @@
   "require": {
     "composer/composer": "2.5.5",
     "nicemodules/wordpress-orm": "dev-master",
-    "doctrine/annotations": "^2.0"
+    "doctrine/annotations": "^2.0",
+    "symfony/serializer": "^5.4"
   },
   "autoload": {
     "psr-4": {

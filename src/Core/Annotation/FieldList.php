@@ -1,5 +1,5 @@
 <?php
-namespace NiceModules\Core\Annotations;
+namespace NiceModules\Core\Annotation;
 /**
  * @Annotation 
  */

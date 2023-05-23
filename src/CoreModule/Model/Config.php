@@ -2,8 +2,8 @@
 
 namespace NiceModules\CoreModule\Model;
 
-use NiceModules\Core\Annotations\Field;
-use NiceModules\Core\Annotations\FieldList;
+use NiceModules\Core\Annotation\Field;
+use NiceModules\Core\Annotation\FieldList;
 use NiceModules\Core\Model;
 use NiceModules\ORM\Annotations\Column;
 use NiceModules\ORM\Annotations\Index;
