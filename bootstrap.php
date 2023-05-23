@@ -25,18 +25,25 @@ if (is_admin()) {
     $router = $coreAdminPlugin->getRouter();
 
     // Add stylesheets
-    $coreAdminPlugin
-        ->addResource(new Resource(Resource::TYPE_CSS, 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900', false))
-        ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/materialdesignicons.min.css'))
-        ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/vuetify.min.css'));
+   
  
     // Add js
     if(WP_DEBUG){
-        $coreAdminPlugin->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vue.js'));
+        $coreAdminPlugin
+            ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/reset.css'))
+            ->addResource(new Resource(Resource::TYPE_CSS, 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900', false))
+            ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/materialdesignicons.min.css'))
+            ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/vuetify.min.css'))
+            ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/backend/admin.css'))
+            ->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vue.js'))
+            ->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vuetify.js'))
+            ->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/CRUD/filters.js'))
+            ->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/CRUD/app.js'))
+        ;
     }else{
         $coreAdminPlugin->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vue.min.js'));
     }
-    $coreAdminPlugin->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vuetify.js'));
+    
 
     $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
         ->addRoute(new Route('nm_config_save', ConfigController::class, 'listSave', true))

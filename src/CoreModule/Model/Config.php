@@ -2,12 +2,18 @@
 
 namespace NiceModules\CoreModule\Model;
 
+use NiceModules\Core\Annotations\Field;
+use NiceModules\Core\Annotations\FieldList;
 use NiceModules\Core\Model;
 use NiceModules\ORM\Annotations\Column;
 use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
+ * @FieldList(){ 
+ *  name="Konfiguracja",
+ * }
+ * 
  * @Table(
  *     type="Entity",
  *     name="config",
@@ -24,6 +30,7 @@ class Config extends Model
 {
     /**
      * @Column(type = "varchar", length = 25)
+     * @Field(label="Katalog", type="text", filterable=true, sortable=false)
      */
     protected string $namespace;
 
