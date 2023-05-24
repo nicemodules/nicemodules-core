@@ -31,6 +31,8 @@ class Template
             throw new Exception('Template file does not exist ' . $this->getFile());
         }
 
+        echo '<pre>'.print_r($this->getFile(), 1).'</pre>';
+        
         extract($this->params);
 
         include $this->getFile();
@@ -54,19 +56,21 @@ class Template
     }
 
     /**
-     * @return string
+     * @param array $params
+     * @return Template
      */
-    public function getFile(): string
+    public function setParams(array $params): Template
     {
-        return $this->templateDir . DIRECTORY_SEPARATOR . $this->file . '.php';
+        $this->params = $params;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getTemplateDir(): string
+    public function getFile(): string
     {
-        return $this->templateDir;
+        return $this->templateDir . DIRECTORY_SEPARATOR . $this->file . '.php';
     }
 
     /**
@@ -80,22 +84,20 @@ class Template
     }
 
     /**
+     * @return string
+     */
+    public function getTemplateDir(): string
+    {
+        return $this->templateDir;
+    }
+
+    /**
      * @param string $templateDir
      * @return Template
      */
     public function setTemplateDir(string $templateDir): Template
     {
         $this->templateDir = $templateDir;
-        return $this;
-    }
-
-    /**
-     * @param array $params
-     * @return Template
-     */
-    public function setParams(array $params): Template
-    {
-        $this->params = $params;
         return $this;
     }
 }

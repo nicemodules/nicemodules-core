@@ -6,6 +6,7 @@ namespace NiceModules\Core\Plugin;
 use NiceModules\Core\Helper\WpHelper;
 use NiceModules\Core\Plugin;
 use NiceModules\Core\Router\FrontendRouter;
+use stdClass;
 
 abstract class FrontendPlugin extends Plugin
 {
@@ -28,9 +29,9 @@ abstract class FrontendPlugin extends Plugin
         if (!WpHelper::detectFunctionUsage(['WP->main'])) {
             return;
         }
-        
-        $post = new \stdClass();
-        $post->post_content =  parent::getContent();
+
+        $post = new stdClass();
+        $post->post_content = parent::getContent();
         $post->post_title = 'undefined'; // TODO: define  titles in controller
         $post->post_type = "page";
         $post->comment_status = "closed";

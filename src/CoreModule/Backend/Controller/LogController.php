@@ -6,7 +6,9 @@ use NiceModules\Core\Controller;
 
 class LogController extends Controller
 {
-    public function list(){
+    public function list()
+    {
         
+        return 'testing';
     }
 }

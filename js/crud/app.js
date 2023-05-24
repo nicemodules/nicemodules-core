@@ -1,6 +1,12 @@
 const NiceModulesCrudApp = {
+    debug: true,
     run: function (params) {
         this.vuetify(params.crud);
+    },
+    log(something){
+        if(this.debug){
+            console.log(something);
+        }
     },
     vuetify: function (crud) {
         const crudApp = this;
@@ -15,15 +21,18 @@ const NiceModulesCrudApp = {
             data: {
                 editedItem: {},
                 editDialog: false,
-                title: crud.title,
+                list: crud.CrudList,
                 items: crud.items,
+                fields: crud.fields,
                 headers: crud.headers,
-                filters: crud.filters,
+                count: 0,
+                options: {},
+                loading: false,
+                //filters: crud.filters,
             },
             beforeMount: function beforeMount() {
                 
             },
-            
             methods: {
                 editItem(item) {
                     this.editedItem = item || {}
@@ -40,17 +49,39 @@ const NiceModulesCrudApp = {
                     let id = item.id
                     let idx = this.items.findIndex(item => item.id === id)
                     if (confirm('Are you sure you want to delete this?')) {
-
                         this.items.splice(idx, 1)
                     }
                 },
+                getData(){
+                    const self= this;
+                    this.loading = true;
+                    
+                    crudApp.log('SYNC');
+                    
+                    crudApp.log(this.options);
+                    // call backend
+                    setTimeout(function (){
+                        self.loading = false;
+                        self.count = self.items.length;
+                    }, 2000);
+                    
+                    
+                }
             },
-            // watch: {
-            //     // items: {
-            //     //     handler: this.handleItemChange,
-            //     //     deep: true
-            //     // }
-            // },
+            watch: {
+                options: {
+                    handler () {
+                        this.getData()
+                    },
+                    deep: true,
+                },
+                items: {
+                    handler: function handler(item, newItem) {
+                        this.count = this.items.length;
+                    },
+                    deep: true
+                },
+            },
         })
     }
     

@@ -3,6 +3,7 @@
 namespace NiceModules\CoreModule\Backend\Controller;
 
 use NiceModules\Core\Controller;
+use NiceModules\Core\Crud\CrudBuilder;
 use NiceModules\Core\Template;
 use NiceModules\Core\Template\TemplateRenderer;
 use NiceModules\CoreModule\CoreModule;
@@ -13,14 +14,13 @@ class ConfigController extends Controller
     public function list()
     {
         $templateRenderer = new TemplateRenderer('Configuration');
-        
-        $builder = new CrudBuilder(Config::class);
-        $builder->build();
-        $crud = $builder->getCrud();
 
+        $builder = new CrudBuilder(Config::class);
+        $crud = $builder->build()->getCrud();
+        
         $templateRenderer
-            ->addTemplate(new Template('Backend/CRUD/filters'))
-            ->addTemplate(new Template('Backend/CRUD/app', ['crud' => $crud]));
+            ->addTemplate(new Template('Backend/Crud/filters'))
+            ->addTemplate(new Template('Backend/Crud/app', ['crud' => $crud]));
 
         $output = '';
         $outputs['Plugin dir'] = CoreModule::instance()->getPluginDir();
@@ -29,8 +29,8 @@ class ConfigController extends Controller
 
         foreach ($outputs as $name => $out) {
             $output .= '<br>' . $name . ': ' . $out;
-        };
-
+        }
+        
         return $templateRenderer->render()->getContent();
     }
 }

@@ -28,22 +28,6 @@ abstract class BackendPlugin extends Plugin
         return $this->installer;
     }
 
-    protected function initializeRouter()
-    {
-        $this->router = new BackendRouter();
-    }
-
-    public function initialize()
-    {
-        if ($this->content = $this->router->route()) {
-            add_action('admin_enqueue_scripts', [$this, 'attachFiles']);
-
-            if ($this->router->getRoute()->isAjax()) {
-                add_action('wp_ajax_' . $this->router->getRoute()->getUri(), [$this, 'renderContent']);
-            }
-        }
-    }
-
     /**
      * @param MenuLink $link
      * @return BackendPlugin
@@ -53,15 +37,6 @@ abstract class BackendPlugin extends Plugin
         $this->menuLinks[$link->menuSlug] = $link;
         return $this;
     }
-
-    /**
-     * @return MenuLink[]
-     */
-    protected function getMenuLinks(): array
-    {
-        return $this->menuLinks;
-    }
-
 
     public function initializeMenu()
     {
@@ -90,8 +65,33 @@ abstract class BackendPlugin extends Plugin
             }
         }
     }
-    
-    public function install(){
+
+    public function install()
+    {
         $this->getInstaller()->installDatabase();
+    }
+
+    protected function initializeRouter()
+    {
+        $this->router = new BackendRouter();
+    }
+
+    public function initialize()
+    {
+        if ($this->content = $this->router->route()) {
+            add_action('admin_enqueue_scripts', [$this, 'attachFiles']);
+
+            if ($this->router->getRoute()->isAjax()) {
+                add_action('wp_ajax_' . $this->router->getRoute()->getUri(), [$this, 'renderContent']);
+            }
+        }
+    }
+
+    /**
+     * @return MenuLink[]
+     */
+    protected function getMenuLinks(): array
+    {
+        return $this->menuLinks;
     }
 }

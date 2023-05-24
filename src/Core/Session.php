@@ -8,13 +8,13 @@ use function openssl_decrypt;
 
 class Session extends Singleton
 {
+    protected static string $keySalt;
+    protected static string $fileName = 'session.php';
     /**
      * @var string
      */
     protected string $key = '';
-    protected static string $keySalt;
     protected string $sessionSalt;
-    protected static string $fileName = 'session.php';
 
     /**
      * @throws Exception
@@ -36,6 +36,32 @@ class Session extends Singleton
         $this->key = $key;
         $this->keySalt = $keySalt;
         $this->sessionSalt = $sessionSalt;
+    }
+
+    /**
+     * Use for install - generate session keys
+     * @param $key
+     */
+    public static function create($key)
+    {
+        self::$keySalt = md5(uniqid('IDKFA', true));
+        $sessionSalt = md5(uniqid('IDDQD', true));
+
+        $codeLines = [
+            '<?php $keySalt = ' . self::$keySalt . ' ; ?>',
+            '<?php $sessionSalt = ' . $sessionSalt . ' ; ?>',
+            '<?php $key = ' . self::getKeyHash($key) . ' ; ?>',
+        ];
+
+        file_put_contents(
+            DATA_DIR . self::$fileName,
+            implode(PHP_EOL, $codeLines)
+        );
+    }
+
+    protected static function getKeyHash($key)
+    {
+        return hash('sha512', $key . self::$keySalt);
     }
 
     /**
@@ -74,17 +100,12 @@ class Session extends Singleton
         self::set('key', self::getKeyHash($key));
     }
 
-    protected function getSessionHash($key)
-    {
-        return hash('sha512', $key . $this->sessionSalt);
-    }
-
     public function encrypt($data, $key = null)
     {
         if (!extension_loaded('openssl')) {
             throw new Exception('This app needs the Open SSL PHP extension.');
-        } 
-        
+        }
+
         return openssl_encrypt($data, "AES-128-ECB", $key ?? $this->get('session_hash'));
     }
 
@@ -93,34 +114,12 @@ class Session extends Singleton
         if (!extension_loaded('openssl')) {
             throw new Exception('This app needs the Open SSL PHP extension.');
         }
-        
+
         return openssl_decrypt($data, "AES-128-ECB", $key ?? $this->get('session_hash'));
-        
     }
 
-    protected static function getKeyHash($key)
+    protected function getSessionHash($key)
     {
-        return hash('sha512', $key . self::$keySalt);
-    }
-
-    /**
-     * Use for install - generate session keys
-     * @param $key
-     */
-    public static function create($key)
-    {
-        self::$keySalt = md5(uniqid('IDKFA', true));
-        $sessionSalt = md5(uniqid('IDDQD', true));
-
-        $codeLines = [
-            '<?php $keySalt = ' . self::$keySalt . ' ; ?>',
-            '<?php $sessionSalt = ' . $sessionSalt . ' ; ?>',
-            '<?php $key = ' . self::getKeyHash($key) . ' ; ?>',
-        ];
-
-        file_put_contents(
-            DATA_DIR . self::$fileName,
-            implode(PHP_EOL, $codeLines)
-        );
+        return hash('sha512', $key . $this->sessionSalt);
     }
 }

@@ -5,7 +5,7 @@ namespace NiceModules\Core\Plugin;
 class MenuLink
 {
     public string $pageTitle;
-    public string $menuTitle ;
+    public string $menuTitle;
     public string $capability;
     public string $menuSlug;
     public ?MenuLink $parent;

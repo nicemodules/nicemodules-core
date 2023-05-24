@@ -2,18 +2,16 @@
 
 namespace NiceModules\CoreModule\Model;
 
-use NiceModules\Core\Annotation\Field;
-use NiceModules\Core\Annotation\FieldList;
+use NiceModules\Core\Annotation\CrudField;
+use NiceModules\Core\Annotation\CrudList;
 use NiceModules\Core\Model;
 use NiceModules\ORM\Annotations\Column;
 use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
- * @FieldList(){ 
- *  name="Konfiguracja",
- * }
- * 
+ * @CrudList(title="Konfiguracja")
+ *
  * @Table(
  *     type="Entity",
  *     name="config",
@@ -30,7 +28,7 @@ class Config extends Model
 {
     /**
      * @Column(type = "varchar", length = 25)
-     * @Field(label="Katalog", type="text", filterable=true, sortable=false)
+     * @CrudField(label="Katalog", type="text", editable=false)
      */
     protected string $namespace;
 
@@ -41,11 +39,13 @@ class Config extends Model
 
     /**
      * @Column(type="varchar", length=100)
+     * @CrudField(label="Zmienna", type="plain")
      */
     protected string $label;
 
     /**
      * @Column(type="varchar", length=150)
+     * @CrudField(label="Opis", type="plain")
      */
     protected string $description;
 
@@ -56,6 +56,7 @@ class Config extends Model
 
     /**
      * @Column(type="text")
+     * @CrudField(label="Wartość", type="config_field")
      */
     protected string $value;
 

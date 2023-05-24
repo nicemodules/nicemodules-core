@@ -2,46 +2,62 @@
 
 namespace NiceModules\Core;
 
-use NiceModules\Core\Annotation\Field;
-use NiceModules\Core\Annotations\FieldList;
+use NiceModules\Core\Annotation\CrudField;
+use NiceModules\Core\Annotation\CrudList;
+use NiceModules\ORM\Manager;
 use NiceModules\ORM\Models\BaseModel;
 
 class Crud
 {
-    protected FieldList $fieldList;
+    public CrudList $CrudList;
     /**
-     * @var Field[]
+     * @var CrudField[]
      */
-    protected array $fields;
+    public array $fields;
     /**
      * @var string[]
      */
-    protected array $headers;
+    public array $headers;
     /**
      * @var BaseModel[]
      */
-    protected array $objects;
+    public array $items;
+
+    protected string $class;
+
+    public function __construct($modelClassName)
+    {
+        $this->class = $modelClassName;
+    }
 
     /**
-     * @param FieldList $fieldList
+     * @return CrudList
+     */
+    public function getCrudList(): CrudList
+    {
+        return $this->CrudList;
+    }
+
+    /**
+     * @param CrudList $CrudList
      * @return Crud
      */
-    public function setFieldList(FieldList $fieldList): Crud
+    public function setCrudList(CrudList $CrudList): Crud
     {
-        $this->fieldList = $fieldList;
+        $this->CrudList = $CrudList;
         return $this;
     }
 
     /**
-     * @return FieldList
+     * @return CrudField[]
      */
-    public function getFieldList(): FieldList
+    public function getFields(): array
     {
-        return $this->fieldList;
+        return $this->fields;
     }
 
     /**
-     * @param Field[] $fields
+     * @param CrudField[] $fields
      * @return Crud
      */
     public function setFields(array $fields): Crud
@@ -51,26 +67,52 @@ class Crud
     }
 
     /**
-     * @return Field[]
-     */
-    public function getFields(): array
-    {
-        return $this->fields;
-    }
-
-
-    /**
-     * TODO: Retrieve session saved json with user crud parameters 
+     * TODO: Retrieve session saved json with user crud parameters
      * Modifying properties of FieldList object (filters, order by, order direction, per page, page number etc. )
      */
-    public function setUserParams(){
-        
+    public function setUserParams()
+    {
     }
-    
+
+    public function setItems()
+    {
+        $queryBuilder = Manager::instance()->getRepository($this->class)->createQueryBuilder();
+
+        $queryBuilder->limit($this->CrudList->perPage, $this->CrudList->getOffset());
+
+        if(isset($this->CrudList->order)){
+            foreach ($this->CrudList->order as $order) {
+                $queryBuilder->orderBy($order->column, $order->direction);
+            }    
+        }
+        $queryBuilder->buildQuery();
+
+        $this->items = $queryBuilder->getResultArray();
+    }
+
     /**
-     * TODO: Use orm for build query and get objects array 
+     * @return string[]
      */
-    public function  setObjects(){
-        
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param string[] $headers
+     * @return Crud
+     */
+    public function setHeaders(array $headers): Crud
+    {
+        $this->headers = $headers;
+        return $this;
+    }
+
+    /**
+     * @return BaseModel[]
+     */
+    public function getItems(): array
+    {
+        return $this->items;
     }
 }

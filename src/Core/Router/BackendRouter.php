@@ -10,7 +10,7 @@ class BackendRouter extends Router
     public function route(): ?string
     {
         $uri = $this->request->get('page', false, Request::ROUTING);
-        
+
         if (!$uri) {
             $uri = $this->request->get('action', null, Request::ROUTING);
         }

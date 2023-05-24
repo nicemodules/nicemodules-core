@@ -35,7 +35,7 @@ abstract class Module extends Singleton
 
     public function getTemplatesDir(): string
     {
-        return  $this->getModuleDir().'Templates';
+        return $this->getModuleDir() . 'Templates';
     }
 
     public function getLogDir()
@@ -44,11 +44,11 @@ abstract class Module extends Singleton
             $this->getModuleDir(),
             'log',
         ]);
-        
-        if(!is_dir($dir)){
+
+        if (!is_dir($dir)) {
             mkdir($dir, 0777, true);
         }
-        
+
         return $dir;
     }
 

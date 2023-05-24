@@ -4,10 +4,10 @@ namespace NiceModules\Core;
 
 use Composer\Console\Application;
 use NiceModules;
+use NiceModules\CoreModule\CoreModule;
 use NiceModules\ORM\Mapper;
 use ReflectionException;
 use Symfony\Component\Console\Input\ArrayInput;
-use NiceModules\CoreModule\CoreModule;
 
 class Installer
 {
@@ -44,7 +44,7 @@ class Installer
     }
 
     /**
-     * Add model update in the database 
+     * Add model update in the database
      * @param string $model
      * @return Installer
      */

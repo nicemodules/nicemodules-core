@@ -11,7 +11,7 @@ use NiceModules\ORM\Models\BaseModel;
  *     prefix = "nm",
  *     column_order={"ID", "date_add", "date_update"}
  *     )
- * 
+ *
  */
 abstract class Model extends BaseModel
 {
@@ -24,12 +24,12 @@ abstract class Model extends BaseModel
      * @Column(type="timestamp", null="NOT NULL", default="CURRENT_TIMESTAMP")
      */
     protected string $date_update;
-    
+
     public function executeBeforeSave()
     {
         parent::executeBeforeSave();
 
-        if(!$this->hasId()){ // is object new?
+        if (!$this->hasId()) { // is object new?
             $this->date_add = date('Y-m-d H:i:s');
         }
     }

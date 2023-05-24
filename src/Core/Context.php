@@ -17,7 +17,7 @@ class Context extends Singleton
     {
         return $this->request;
     }
-    
+
     /**
      * @return Controller
      */
@@ -37,18 +37,18 @@ class Context extends Singleton
     }
 
     /**
-     * @param Plugin $activePlugin
-     */
-    public function setActivePlugin(Plugin $activePlugin): void
-    {
-        $this->activePlugin = $activePlugin;
-    }
-
-    /**
      * @return Plugin
      */
     public function getActivePlugin(): Plugin
     {
         return $this->activePlugin;
+    }
+
+    /**
+     * @param Plugin $activePlugin
+     */
+    public function setActivePlugin(Plugin $activePlugin): void
+    {
+        $this->activePlugin = $activePlugin;
     }
 }

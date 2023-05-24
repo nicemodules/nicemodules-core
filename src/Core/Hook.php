@@ -5,7 +5,7 @@ namespace NiceModules\Core;
 class Hook extends Singleton
 {
     protected array $hooks = [];
-    
+
     /**
      * @param string $hookName
      * @param callable $callback

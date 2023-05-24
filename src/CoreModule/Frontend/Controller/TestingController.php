@@ -6,7 +6,8 @@ use NiceModules\Core\Controller;
 
 class TestingController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return 'TESTING';
     }
 }

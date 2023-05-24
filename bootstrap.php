@@ -24,10 +24,13 @@ if (is_admin()) {
     // Define rotes
     $router = $coreAdminPlugin->getRouter();
 
-    // Add stylesheets
-   
- 
-    // Add js
+    $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
+        ->addRoute(new Route('nm_config_save', ConfigController::class, 'listSave', true))
+        ->addRoute(new Route('nm_log', LogController::class, 'list'))
+        ->addRoute(new Route('nm_log_save', LogController::class, 'logSave', true))
+        ->addRoute(new Route('nm_index', ConfigController::class, 'list'));
+    
+    // Add resources
     if(WP_DEBUG){
         $coreAdminPlugin
             ->addResource(new Resource(Resource::TYPE_CSS, CoreModule::instance()->getPluginUrl().'css/reset.css'))
@@ -44,13 +47,6 @@ if (is_admin()) {
         $coreAdminPlugin->addResource(new Resource(Resource::TYPE_JS, CoreModule::instance()->getPluginUrl().'js/vue.min.js'));
     }
     
-
-    $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
-        ->addRoute(new Route('nm_config_save', ConfigController::class, 'listSave', true))
-        ->addRoute(new Route('nm_log', LogController::class, 'list'))
-        ->addRoute(new Route('nm_log_save', LogController::class, 'logSave', true))
-        ->addRoute(new Route('nm_index', ConfigController::class, 'list'));
-
     // Define menu links
     $mainLink = new MenuLink('NiceModules', 'Config', 'nm_index');
 

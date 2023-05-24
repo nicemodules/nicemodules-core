@@ -3,7 +3,8 @@
 namespace NiceModules\Tests;
 
 use NiceModules\Core\Installer;
-use NiceModules\Model\Config;
+use NiceModules\CoreModule\Model\Config;
+use NiceModules\ORM\Manager;
 use PHPUnit\Framework\TestCase;
 
 class InstallerTest extends TestCase
@@ -20,6 +21,10 @@ class InstallerTest extends TestCase
         $installer = new Installer();
         $installer->addModel(Config::class);
         $installer->installDatabase();
+
+        $result = Manager::instance()->getAdapter()->fetch('SHOW TABLES LIKE "' . Config::class . '"');
+        $this->assertEmpty($result);
+        
     }
 
     public function testAddModel()

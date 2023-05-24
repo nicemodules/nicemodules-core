@@ -54,8 +54,6 @@ abstract class Plugin
         return $this->resources;
     }
 
-    abstract protected function initializeRouter();
-
     public function getRouter(): Router
     {
         return $this->router;
@@ -92,7 +90,8 @@ abstract class Plugin
                 );
             }
         }
-
     }
+
+    abstract protected function initializeRouter();
 
 }

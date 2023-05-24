@@ -46,7 +46,7 @@ class Route
         $rfl = new  ReflectionClass($this->controllerClass);
         $controllerInstance = $rfl->newInstance();
         Context::instance()->setController($controllerInstance);
-        
+
         return $controllerInstance;
     }
 
@@ -57,7 +57,7 @@ class Route
     {
         return $this->controllerMethod;
     }
-    
+
     /**
      * @return bool
      */
