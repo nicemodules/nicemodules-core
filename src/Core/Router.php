@@ -12,6 +12,7 @@ abstract class Router
     protected array $routes;
     protected Request $request;
     protected Route $route;
+    protected array $uris;
 
     public function __construct()
     {
@@ -21,6 +22,7 @@ abstract class Router
     public function addRoute(Route $route): Router
     {
         $this->routes[$route->getUri()] = $route;
+        $this->uris[$route->getControllerClass()][$route->getControllerMethod()] = $route->getUri();
         return $this;
     }
 
@@ -29,6 +31,12 @@ abstract class Router
         return $this->route;
     }
 
+    public function getUri($controller, $method){
+        if(isset($this->uris[$controller][$method])){
+            return $this->uris[$controller][$method];
+        }
+        return null;
+    }
 
     abstract public function route(): ?string;
 

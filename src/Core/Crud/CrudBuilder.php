@@ -4,7 +4,8 @@ namespace NiceModules\Core\Crud;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use NiceModules\Core\Annotation\CrudField;
-use NiceModules\Core\Annotation\CrudList;
+use NiceModules\Core\Annotation\CrudOptions;
+use NiceModules\Core\Controller\CrudController;
 use NiceModules\Core\Crud;
 use ReflectionClass;
 use ReflectionException;
@@ -16,10 +17,12 @@ class CrudBuilder
     protected Crud $crud;
     protected AnnotationReader $reader;
     protected ReflectionClass $reflector;
+    protected CrudController $controller;
 
-    public function __construct(string $modelClassName)
+    public function __construct(string $modelClassName, CrudController $controller)
     {
         $this->class = $modelClassName;
+        $this->controller = $controller;
     }
 
     public function build(): CrudBuilder
@@ -27,7 +30,6 @@ class CrudBuilder
         $this->crud = new Crud($this->class);
         $this->mapAnnotations();
         $this->crud->setUserParams();
-        $this->crud->setItems();
 
         return $this;
     }
@@ -45,9 +47,9 @@ class CrudBuilder
         $reflector = $this->getReflector();
 
         // Get the annotation reader instance
-        $fieldList = $this->getReader()->getClassAnnotation($reflector, CrudList::class);
+        $fieldList = $this->getReader()->getClassAnnotation($reflector, CrudOptions::class);
 
-        $this->crud->setCrudList($fieldList);
+        $this->crud->setOptions($fieldList);
         
         $fields = [];
         $headers = [];
@@ -59,7 +61,7 @@ class CrudBuilder
             if ($field && isset($field->type)) {
                 // Register annotation 
                 $fields[$property->name] = $field;
-                $headers[] = new CrudHeader($field->label, $property->name, $field->sortable);
+                $headers[] = new CrudHeader($field->label, $property->name, $field->type, $field->sortable);
             }
         }
 

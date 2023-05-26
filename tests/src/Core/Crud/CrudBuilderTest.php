@@ -18,7 +18,7 @@ class CrudBuilderTest extends TestCase
         $this->assertInstanceOf(Crud::class, $crud);
         $this->assertNotEmpty($crud->getHeaders());
         $this->assertNotEmpty($crud->getFields());
-        $this->assertNotEmpty($crud->getCrudList());
+        $this->assertNotEmpty($crud->getOptions());
     }
     
 }

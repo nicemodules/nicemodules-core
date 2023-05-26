@@ -3,14 +3,14 @@
 namespace NiceModules\CoreModule\Model;
 
 use NiceModules\Core\Annotation\CrudField;
-use NiceModules\Core\Annotation\CrudList;
+use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Model;
 use NiceModules\ORM\Annotations\Column;
 use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
- * @CrudList(title="Konfiguracja")
+ * @CrudOptions(title="Konfiguracja")
  *
  * @Table(
  *     type="Entity",

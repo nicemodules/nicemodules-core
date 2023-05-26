@@ -65,4 +65,12 @@ class Route
     {
         return $this->ajax;
     }
+
+    /**
+     * @return string
+     */
+    public function getControllerClass(): string
+    {
+        return $this->controllerClass;
+    }
 }

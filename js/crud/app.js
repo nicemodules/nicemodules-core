@@ -1,3 +1,4 @@
+
 const NiceModulesCrudApp = {
     debug: true,
     run: function (params) {
@@ -16,17 +17,20 @@ const NiceModulesCrudApp = {
             vuetify: new Vuetify({
                 theme: {
                     dark: false
-                }
+                },
+                lang:  {
+                    locales: { pl },
+                    current: 'pl',
+                },
             }),
             data: {
                 editedItem: {},
                 editDialog: false,
-                list: crud.CrudList,
-                items: crud.items,
+                items: [],
                 fields: crud.fields,
                 headers: crud.headers,
                 count: 0,
-                options: {},
+                options: crud.CrudOptions,
                 loading: false,
                 //filters: crud.filters,
             },

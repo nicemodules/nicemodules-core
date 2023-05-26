@@ -6,20 +6,12 @@ use NiceModules\Core\Template;
 
 class TemplateRenderer
 {
-    protected string $title = '';
     protected string $content = '';
     /**
      * @var Template[]
      */
     protected array $templates;
-
-    /**
-     * @param $title
-     */
-    public function __construct($title)
-    {
-        $this->title = $title;
-    }
+    
 
     public function addTemplate(Template $template): TemplateRenderer
     {

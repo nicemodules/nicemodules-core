@@ -44,7 +44,7 @@ class Installer
     }
 
     /**
-     * Add model update in the database
+     * Add model to update in the database
      * @param string $model
      * @return Installer
      */

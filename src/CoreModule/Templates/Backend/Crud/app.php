@@ -10,7 +10,7 @@ $crud = json_encode($crud);
             <v-content class="container align-center px-1">
 
                 <h2 class="font-weight-light mb-2">
-                    {{ list.title }}
+                    {{ options.title }}
                 </h2>
 
                 <v-card>
@@ -20,8 +20,12 @@ $crud = json_encode($crud);
                             :options.sync="options"
                             :server-items-length="count"
                             :loading="loading"
+                            :footer-props="{
+                              'items-per-page-options': [10, 20, 50, 100] // opcje liczby wierszy na stronę
+                            }"
                             class="elevation-1"
                             loading-text=""
+                            
                     >
 
 <!--                        <template v-slot:top>-->
@@ -72,8 +76,8 @@ $crud = json_encode($crud);
 <!--                    <div class="text-center pt-2">-->
 <!---->
 <!--                        <v-pagination-->
-<!--                                v-model="CrudList.page"-->
-<!--                                :length="CrudList.perPage"-->
+<!--                                v-model="CrudOptions.page"-->
+<!--                                :length="CrudOptions.perPage"-->
 <!--                        ></v-pagination>-->
 <!---->
 <!--                        <v-text-field-->

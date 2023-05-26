@@ -3,13 +3,13 @@
 namespace NiceModules\Core;
 
 use NiceModules\Core\Annotation\CrudField;
-use NiceModules\Core\Annotation\CrudList;
+use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\ORM\Manager;
 use NiceModules\ORM\Models\BaseModel;
 
 class Crud
 {
-    public CrudList $CrudList;
+    public CrudOptions $options;
     /**
      * @var CrudField[]
      */
@@ -18,10 +18,7 @@ class Crud
      * @var string[]
      */
     public array $headers;
-    /**
-     * @var BaseModel[]
-     */
-    public array $items;
+
 
     protected string $class;
 
@@ -31,20 +28,20 @@ class Crud
     }
 
     /**
-     * @return CrudList
+     * @return CrudOptions
      */
-    public function getCrudList(): CrudList
+    public function getOptions(): CrudOptions
     {
-        return $this->CrudList;
+        return $this->CrudOptions;
     }
 
     /**
-     * @param CrudList $CrudList
+     * @param CrudOptions $options
      * @return Crud
      */
-    public function setCrudList(CrudList $CrudList): Crud
+    public function setOptions(CrudOptions $options): Crud
     {
-        $this->CrudList = $CrudList;
+        $this->CrudOptions = $options;
         return $this;
     }
 
@@ -74,21 +71,6 @@ class Crud
     {
     }
 
-    public function setItems()
-    {
-        $queryBuilder = Manager::instance()->getRepository($this->class)->createQueryBuilder();
-
-        $queryBuilder->limit($this->CrudList->perPage, $this->CrudList->getOffset());
-
-        if(isset($this->CrudList->order)){
-            foreach ($this->CrudList->order as $order) {
-                $queryBuilder->orderBy($order->column, $order->direction);
-            }    
-        }
-        $queryBuilder->buildQuery();
-
-        $this->items = $queryBuilder->getResultArray();
-    }
 
     /**
      * @return string[]
@@ -106,13 +88,5 @@ class Crud
     {
         $this->headers = $headers;
         return $this;
-    }
-
-    /**
-     * @return BaseModel[]
-     */
-    public function getItems(): array
-    {
-        return $this->items;
     }
 }
