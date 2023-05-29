@@ -14,3 +14,6 @@
 
 !/css
 !/js
+
+!/_gulp
+/_gulp/node_modules
