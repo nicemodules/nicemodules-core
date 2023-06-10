@@ -1,7 +1,6 @@
 <?php
 /** @var string $crud */
 
-echo '<pre>'.print_r(json_encode($crud, JSON_PRETTY_PRINT), 1).'</pre>';
 $crud = json_encode($crud);
 ?>
 <div class="nm-app">
@@ -21,7 +20,7 @@ $crud = json_encode($crud);
                             :server-items-length="count"
                             :loading="loading"
                             :footer-props="{
-                              'items-per-page-options': [10, 20, 50, 100] // opcje liczby wierszy na stronę
+                              'items-per-page-options': [10, 20, 50, 100] 
                             }"
                             class="elevation-1"
                             loading-text=""
@@ -139,8 +138,6 @@ $crud = json_encode($crud);
 </div>
 
 <script>
-    
-    
     NiceModulesCrudApp.run({
         crud: <?php echo $crud ?>,
     });

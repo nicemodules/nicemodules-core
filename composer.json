@@ -18,8 +18,16 @@
   "require": {
     "composer/composer": "2.5.5",
     "nicemodules/wordpress-orm": "dev-master",
-    "doctrine/annotations": "^2.0"
+    "doctrine/annotations": "^2.0",
+    "symfony/translation": "^5.4",
+    "deeplcom/deepl-php": "^1.4"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:nicemodules/wordpress-orm.git"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "NiceModules\\": "src/"

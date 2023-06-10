@@ -11,9 +11,7 @@ class TemplateRendererTest extends TestCase
 
     public function test__construct()
     {
-        $title = 'Test title';
-        $renderer = new TemplateRenderer($title);
-        $this->assertEquals($title, $renderer->getTitle());
+        $renderer = new TemplateRenderer();
     }
 
     /**

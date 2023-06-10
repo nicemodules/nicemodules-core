@@ -52,6 +52,34 @@ abstract class Module extends Singleton
         return $dir;
     }
 
+    public function getLangDir()
+    {
+        $dir = implode(DIRECTORY_SEPARATOR, [
+            $this->getPluginDir(),
+            'languages',
+        ]);
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        return $dir;
+    }
+
+    public function getDataDir()
+    {
+        $dir = implode(DIRECTORY_SEPARATOR, [
+            $this->getPluginDir(),
+            'data',
+        ]);
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        return $dir;
+    }
+    
     public function getPluginUrl()
     {
         return plugin_dir_url($this->getPluginFile());
@@ -61,9 +89,13 @@ abstract class Module extends Singleton
     {
         return implode(DIRECTORY_SEPARATOR, [
             $this->getPluginDir(),
-            $this->reflector->getConstant('CODE_NAME') . '.php'
+            $this->getCodeName() . '.php'
         ]);
     }
 
 
+    public function getCodeName(): string
+    {
+        return $this->reflector->getConstant('CODE_NAME');
+    }
 }

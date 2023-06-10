@@ -4,15 +4,17 @@ const cleanCSS = require('gulp-clean-css');
 const size = require('gulp-size');
 const rename = require('gulp-rename');
 
-module.exports = function(gulp, config){
+module.exports = function(gulp, config, env){
 
-    gulp.task('app-scss-backend', function(){
+    gulp.task('app-scss', function(){
 
-        const scssBundle =  config.app_scss_backend.map(function (element){
-            return  config.srcDir + '/scss/' + element + '.scss';
+        const cfg = config[env];
+        
+        const scssBundle =  cfg.app_scss.map(function (element){
+            return  config.src_dir + '/scss/' + element + '.scss';
         });
         
-        const resultDir = config.srcDir + '/css';
+        const resultDir = config.src_dir + '/css';
 
         console.log(scssBundle);
 

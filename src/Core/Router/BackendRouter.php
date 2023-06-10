@@ -14,7 +14,7 @@ class BackendRouter extends Router
         if (!$uri) {
             $uri = $this->request->get('action', null, Request::ROUTING);
         }
-
+        
         if (isset($this->routes[$uri])) {
             $this->route = $this->routes[$uri];
             return call_user_func([$this->route->getController(), $this->route->getControllerMethod()]);

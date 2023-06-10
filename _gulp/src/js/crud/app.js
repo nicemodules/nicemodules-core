@@ -1,12 +1,10 @@
-import pl from 'locale/pl'
-
 const NiceModulesCrudApp = {
     debug: true,
     run: function (params) {
         this.vuetify(params.crud);
     },
-    log(something){
-        if(this.debug){
+    log(something) {
+        if (this.debug) {
             console.log(something);
         }
     },
@@ -19,9 +17,9 @@ const NiceModulesCrudApp = {
                 theme: {
                     dark: false
                 },
-                lang:  {
-                    locales: pl,
-                    current: 'pl',
+                lang: {
+                    locales: { lc: crud.translation },
+                    current: 'lc',
                 },
             }),
             data: {
@@ -36,7 +34,7 @@ const NiceModulesCrudApp = {
                 //filters: crud.filters,
             },
             beforeMount: function beforeMount() {
-                
+
             },
             methods: {
                 editItem(item) {
@@ -57,25 +55,25 @@ const NiceModulesCrudApp = {
                         this.items.splice(idx, 1)
                     }
                 },
-                getData(){
-                    const self= this;
+                getData() {
+                    const self = this;
                     this.loading = true;
-                    
+
                     crudApp.log('SYNC');
-                    
+
                     crudApp.log(this.options);
                     // call backend
-                    setTimeout(function (){
+                    setTimeout(function () {
                         self.loading = false;
                         self.count = self.items.length;
                     }, 2000);
-                    
-                    
+
+
                 }
             },
             watch: {
                 options: {
-                    handler () {
+                    handler() {
                         this.getData()
                     },
                     deep: true,
@@ -89,7 +87,7 @@ const NiceModulesCrudApp = {
             },
         })
     }
-    
+
 }
 
 

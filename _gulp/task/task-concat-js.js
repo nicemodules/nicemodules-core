@@ -3,17 +3,19 @@ const fs = require('fs');
 const size = require('gulp-size');
 const merge = require('merge-stream');
 
-module.exports = function (gulp, config) {
+module.exports = function (gulp, config, env) {
 
-    gulp.task('concat-js-backend', function () {
+    gulp.task('concat-js', function () {
+
+        const cfg = config[env];
 
         const jsBundle = [];
         const minJsBundle = [];
 
-        for (let i = 0; i < config.concat_js_backend.length; i++) {
-            let element = config.concat_js_backend[i];
-            let css = config.srcDir + '/js/' + element + '.js';
-            let minCss = config.srcDir + '/js/' + element + '.min.js';
+        for (let i = 0; i < cfg.concat_js.length; i++) {
+            let element = cfg.concat_js[i];
+            let css = config.src_dir + '/js/' + element + '.js';
+            let minCss = config.src_dir + '/js/' + element + '.min.js';
 
             if (fs.existsSync(css)) {
                 jsBundle.push(css);
@@ -28,7 +30,7 @@ module.exports = function (gulp, config) {
             }
         }
 
-        const resultDir = config.resultDir + '/backend';
+        const resultDir = config.result_dir + '/js/' + env;
 
         console.log(jsBundle);
         console.log(minJsBundle);
@@ -39,7 +41,7 @@ module.exports = function (gulp, config) {
             .pipe(size({showFiles: true}))
         ;
 
-        const stream2 =  gulp.src(minJsBundle)
+        const stream2 = gulp.src(minJsBundle)
             .pipe(concat('bundle.min.js'))
             .pipe(gulp.dest(resultDir))
             .pipe(size({showFiles: true}))

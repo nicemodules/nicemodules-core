@@ -2,13 +2,15 @@
 
 namespace NiceModules\Core\Annotation;
 
+use NiceModules\Core\Context;
+use NiceModules\Core\Lang;
+
 /**
  * @Annotation
  */
 class CrudOptions
 {
     public string $title;
-    public string $lang = 'pl';
     /**
      * @var CrudOrder[]
      */
@@ -24,5 +26,21 @@ class CrudOptions
      */
     public array $sortDesc;
     public bool $multiSort = false;
-    
+
+
+    public function __construct(array $values)
+    {
+        $lang = Context::instance()->getLang();
+        
+        foreach ($values as $name => $value) {
+            switch ($name) {
+                case 'title':
+                    $this->$name = $lang->get($value);
+                    break;
+                default:
+                    $this->$name = $value;
+                    break;
+            }
+        }
+    }
 }

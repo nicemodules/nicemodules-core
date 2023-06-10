@@ -7,6 +7,7 @@ class Context extends Singleton
     protected Request $request;
     protected Controller $controller;
     protected Plugin $activePlugin;
+    protected Lang $lang;
 
     protected function __construct()
     {
@@ -50,5 +51,19 @@ class Context extends Singleton
     public function setActivePlugin(Plugin $activePlugin): void
     {
         $this->activePlugin = $activePlugin;
+    }
+
+    /**
+     * @return Lang
+     */
+    public function getLang(): Lang
+    {
+        if(!isset($this->lang)){
+            $locale = get_user_locale();
+            $this->lang = new Lang($locale);
+            $this->lang->setDir($this->getActivePlugin()->getModule()->getLangDir());
+        }
+        
+        return $this->lang;
     }
 }

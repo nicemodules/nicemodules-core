@@ -26,12 +26,18 @@ abstract class CrudController extends Controller
      */
     protected array $templates;
 
+    /**
+     * @return string
+     */
+    public function getModelClass(): string
+    {
+        return $this->modelClass;
+    }
+
     protected function render(){
 
         $this->templateRenderer = new TemplateRenderer('');
-
-      
-
+        
         foreach ($this->getTemplates() as $template){
             $this->templateRenderer->addTemplate($template);
         }
@@ -42,7 +48,7 @@ abstract class CrudController extends Controller
     
     protected function getCrud(): Crud
     {
-        $builder = new CrudBuilder($this->modelClass, $this);
+        $builder = new CrudBuilder($this);
         return $builder->build()->getCrud();
     }
     

@@ -1,6 +1,6 @@
 <?php
 
-namespace NiceModules\Tests;
+namespace NiceModules\Tests\Core;
 
 use NiceModules\Core\Installer;
 use NiceModules\CoreModule\Model\Config;

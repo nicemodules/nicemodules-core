@@ -10,7 +10,7 @@ use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
- * @CrudOptions(title="Konfiguracja")
+ * @CrudOptions(title="Configuration")
  *
  * @Table(
  *     type="Entity",
@@ -28,7 +28,7 @@ class Config extends Model
 {
     /**
      * @Column(type = "varchar", length = 25)
-     * @CrudField(label="Katalog", type="text", editable=false)
+     * @CrudField(label="Catalogue", type="text", editable=false)
      */
     protected string $namespace;
 
@@ -39,13 +39,13 @@ class Config extends Model
 
     /**
      * @Column(type="varchar", length=100)
-     * @CrudField(label="Zmienna", type="plain")
+     * @CrudField(label="Variable", type="plain")
      */
     protected string $label;
 
     /**
      * @Column(type="varchar", length=150)
-     * @CrudField(label="Opis", type="plain")
+     * @CrudField(label="Description", type="plain")
      */
     protected string $description;
 
@@ -56,7 +56,7 @@ class Config extends Model
 
     /**
      * @Column(type="text")
-     * @CrudField(label="Wartość", type="config_field")
+     * @CrudField(label="Value", type="config_field")
      */
     protected string $value;
 

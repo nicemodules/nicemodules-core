@@ -21,8 +21,6 @@ class CrudHeader
         if($width !== null){
             $this->width = $width;    
         }
-
-    
     }
 
 }

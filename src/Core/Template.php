@@ -30,8 +30,6 @@ class Template
         if (!file_exists($this->getFile())) {
             throw new Exception('Template file does not exist ' . $this->getFile());
         }
-
-        echo '<pre>'.print_r($this->getFile(), 1).'</pre>';
         
         extract($this->params);
 

@@ -2,6 +2,8 @@
 
 namespace NiceModules\Core\Annotation;
 
+use NiceModules\Core\Context;
+
 /**
  * @Annotation
  */
@@ -22,4 +24,20 @@ class CrudField
     public bool $sortable = true;
 
     public array $subFields = [];
+
+    public function __construct(array $values)
+    {
+        $lang = Context::instance()->getLang();
+
+        foreach ($values as $name => $value) {
+            switch ($name) {
+                case 'label':
+                    $this->$name = $lang->get($value);
+                    break;
+                default:
+                    $this->$name = $value;
+                    break;
+            }
+        }
+    }
 }

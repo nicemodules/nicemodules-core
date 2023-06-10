@@ -4,6 +4,7 @@ namespace NiceModules\Core;
 
 use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudOptions;
+use NiceModules\Core\Crud\CrudTranslation;
 use NiceModules\ORM\Manager;
 use NiceModules\ORM\Models\BaseModel;
 
@@ -18,13 +19,16 @@ class Crud
      * @var string[]
      */
     public array $headers;
-
-
+    
+    public array $translation;
+    
     protected string $class;
 
     public function __construct($modelClassName)
     {
         $this->class = $modelClassName;
+        $translationInstance = new CrudTranslation();
+        $this->translation = $translationInstance->get();
     }
 
     /**

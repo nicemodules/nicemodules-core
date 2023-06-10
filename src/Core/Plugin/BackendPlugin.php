@@ -12,10 +12,8 @@ use NiceModules\Core\Router\BackendRouter;
 
 abstract class BackendPlugin extends Plugin
 {
-
     protected array $menuLinks = [];
     protected Installer $installer;
-
 
     public function __construct(Module $module)
     {

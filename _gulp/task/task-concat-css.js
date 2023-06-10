@@ -4,18 +4,19 @@ const size = require('gulp-size');
 const merge = require('merge-stream');
 
 
+module.exports = function (gulp, config, env) {
 
-module.exports = function (gulp, config) {
+    gulp.task('concat-css', function () {
 
-    gulp.task('concat-css-backend', function () {
-
+        const cfg = config[env];
+        
         const cssBundle = [];
         const minCssBundle = [];
 
-        for (let i = 0; i < config.concat_css_backend.length; i++) {
-            let element = config.concat_css_backend[i];
-            let css = config.srcDir + '/css/' + element + '.css';
-            let minCss = config.srcDir + '/css/' + element + '.min.css';
+        for (let i = 0; i < cfg.concat_css.length; i++) {
+            let element = cfg.concat_css[i];
+            let css = config.src_dir + '/css/' + element + '.css';
+            let minCss = config.src_dir + '/css/' + element + '.min.css';
 
             if (fs.existsSync(css)) {
                 cssBundle.push(css);
@@ -30,7 +31,7 @@ module.exports = function (gulp, config) {
             }
         }
 
-        const resultDir = config.resultDir + '/backend';
+        const resultDir = config.result_dir + '/css/' + env;
 
         console.log(cssBundle);
         console.log(minCssBundle);

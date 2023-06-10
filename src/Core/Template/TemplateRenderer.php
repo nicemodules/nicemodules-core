@@ -42,14 +42,6 @@ class TemplateRenderer
     }
 
     /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
      * @return Template[]
      */
     public function getTemplates(): array

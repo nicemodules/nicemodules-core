@@ -19,9 +19,9 @@ class CrudBuilder
     protected ReflectionClass $reflector;
     protected CrudController $controller;
 
-    public function __construct(string $modelClassName, CrudController $controller)
+    public function __construct(CrudController $controller)
     {
-        $this->class = $modelClassName;
+        $this->class = $controller->getModelClass();
         $this->controller = $controller;
     }
 
