@@ -6,7 +6,7 @@ use NiceModules\Core\Plugin\MenuLink;
 use NiceModules\Core\Plugin\Resource;
 use NiceModules\Core\Router\Route;
 use NiceModules\CoreModule\Backend\Controller\ConfigController;
-use NiceModules\CoreModule\Backend\Controller\LogController;
+use NiceModules\Core\Controller\LogController;
 use NiceModules\CoreModule\Backend\CoreBackendPlugin;
 use NiceModules\CoreModule\CoreModule;
 use NiceModules\CoreModule\Frontend\Controller\TestingController;
@@ -28,7 +28,7 @@ if (is_admin()) {
     $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
         ->addRoute(new Route('nm_config_save', ConfigController::class, 'listSave', true))
         ->addRoute(new Route('nm_log', LogController::class, 'list'))
-        ->addRoute(new Route('nm_log_save', LogController::class, 'logSave', true))
+        ->addRoute(new Route('nm_log_data', LogController::class, 'getItems', true))
         ->addRoute(new Route('nm_index', ConfigController::class, 'list'));
     
     // Add resources

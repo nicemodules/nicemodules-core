@@ -9,8 +9,8 @@ class CrudTranslation
     public function get()
     {
         $l = Context::instance()->getLang();
-        
-       return [
+
+        return [
             'badge' => $l->get('Badge'),
             'close' => $l->get('Close'),
             'dataIterator' => [
@@ -44,6 +44,8 @@ class CrudTranslation
                 'nextYearAriaLabel' => $l->get('Next year'),
                 'prevMonthAriaLabel' => $l->get('Previous month'),
                 'prevYearAriaLabel' => $l->get('Previous year'),
+                'form' => $l->get('from'),
+                'to' => $l->get('to'),
             ],
             'noDataText' => $l->get('No data available'),
             'carousel' => [
@@ -77,6 +79,15 @@ class CrudTranslation
                 'ariaLabel' => [
                     'icon' => $l->get('Rating {0} of {1}'),
                 ],
+            ],
+            'buttons' => [
+                'add' => $l->get('Add'),
+                'filter' => $l->get('Filter'),
+                'cancel' => $l->get('Cancel'),
+                'save' => $l->get('Save'),
+                'delete' => $l->get('Delete'),
+                'edit' => $l->get('Edit'),
+                'ok' => $l->get('OK'),
             ],
         ];
     }

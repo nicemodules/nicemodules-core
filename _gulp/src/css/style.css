@@ -1,0 +1,12 @@
+.theme--light.v-application {
+  background: transparent; }
+
+.v-application--wrap {
+  min-height: 0px; }
+
+.nm-app {
+  padding: 10px; }
+
+#wpbody-content {
+  width: auto;
+  min-width: 50%; }

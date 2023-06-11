@@ -15,12 +15,22 @@ class Crud
      * @var CrudField[]
      */
     public array $fields;
+    
+    /**
+     * @var CrudField[]
+     */
+    public array $filters;
+    
     /**
      * @var string[]
      */
     public array $headers;
     
     public array $translation;
+    
+    public array $uris;
+    
+    public string $locale;
     
     protected string $class;
 
@@ -29,6 +39,7 @@ class Crud
         $this->class = $modelClassName;
         $translationInstance = new CrudTranslation();
         $this->translation = $translationInstance->get();
+        $this->locale = str_replace('_', '-', Context::instance()->getLang()->getLocale());
     }
 
     /**
@@ -92,5 +103,25 @@ class Crud
     {
         $this->headers = $headers;
         return $this;
+    }
+    
+    public function addUri($method, $uri){
+        $this->uris[$method] = $uri;
+    }
+
+    /**
+     * @param CrudField[] $filters
+     */
+    public function setFilters(array $filters): void
+    {
+        $this->filters = $filters;
+    }
+
+    /**
+     * @return CrudField[]
+     */
+    public function getFilters(): array
+    {
+        return $this->filters;
     }
 }

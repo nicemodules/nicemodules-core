@@ -18,10 +18,12 @@ class CrudField
     const TYPE_DATE_TIME = 'date_time';
 
     public string $label;
+    public string $name;
     public string $type;
     public bool $editable = true;
     public bool $filterable = true;
     public bool $sortable = true;
+    public $value;
 
     public array $subFields = [];
 

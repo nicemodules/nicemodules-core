@@ -4,6 +4,7 @@ namespace NiceModules\Core;
 
 use NiceModules\Core\Lang\Locales;
 use NiceModules\Core\Service\DeepL\DeepLService;
+use PHPUnit\Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Translation\Dumper\MoFileDumper;
 use Symfony\Component\Translation\Dumper\PoFileDumper;
@@ -38,7 +39,11 @@ class Lang
 
         $this->domain = Context::instance()->getActivePlugin()->getModule()->getCodeName();
 
-        $this->service = new DeepLService();
+        try {
+            $this->service = new DeepLService();     
+        }catch (\Throwable $e){
+            Logger::add($e->getMessage());
+        }
     }
 
     /**
@@ -47,6 +52,14 @@ class Lang
     public function setDir(string $dir): void
     {
         $this->dir = $dir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
     }
 
     protected function getTranslator(): Translator
@@ -93,9 +106,15 @@ class Lang
 
         if ($this->needTranslation() && $this->getTranslator()->getCatalogue()->has($text, $this->domain)) {
             return $this->getTranslator()->getCatalogue()->get($text, $this->domain);
-        } elseif ($localeLang) { // add translation using deepL service if not exist
-
-            $result = $this->service->get($text, $localeLang);
+        } elseif (isset($this->service)  && $localeLang) { // add translation using deepL service if not exist
+    
+            try{
+                $result = $this->service->get($text, $localeLang);
+            }catch (\Throwable $e){
+                Logger::add($e->getMessage(), __CLASS__, Logger::ERROR);
+                return $text;
+            }
+            
             $this->addTranslation($text, $result);
             return $result;
         } else {

@@ -2,6 +2,8 @@
 
 namespace NiceModules\Core\Plugin;
 
+use NiceModules\Core\Context;
+
 class MenuLink
 {
     public string $pageTitle;
@@ -24,8 +26,10 @@ class MenuLink
         ?MenuLink $parent = null,
         string $capability = 'edit_posts'
     ) {
-        $this->pageTitle = $pageTitle;
-        $this->menuTitle = $menuTitle;
+        $l =  Context::instance()->getLang();
+        
+        $this->pageTitle = $l->get($pageTitle);
+        $this->menuTitle =  $l->get($menuTitle);
         $this->menuSlug = $menuSlug;
         $this->parent = $parent;
         $this->capability = $capability;

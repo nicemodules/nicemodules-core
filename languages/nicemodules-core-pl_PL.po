@@ -129,3 +129,51 @@ msgstr "Opis"
 
 msgid "Value"
 msgstr "Wartość"
+
+msgid "Config"
+msgstr "Konfiguracja"
+
+msgid "NiceModules"
+msgstr "NiceModules"
+
+msgid "Log"
+msgstr "Dziennik"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Source"
+msgstr "Źródło"
+
+msgid "Added"
+msgstr "Dodano"
+
+msgid "Data"
+msgstr "Dane"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Save"
+msgstr "Zapisz"
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "Edit"
+msgstr "Edytuj"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "from"
+msgstr "z"
+
+msgid "to"
+msgstr "do"

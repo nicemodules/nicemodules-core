@@ -18,12 +18,12 @@ abstract class Model extends BaseModel
     /**
      * @Column(type="datetime", null="NOT NULL")
      */
-    protected string $date_add;
+    protected ?string $date_add;
 
     /**
      * @Column(type="timestamp", null="NOT NULL", default="CURRENT_TIMESTAMP")
      */
-    protected string $date_update;
+    protected ?string $date_update;
 
     public function executeBeforeSave()
     {

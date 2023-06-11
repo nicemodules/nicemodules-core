@@ -13,12 +13,18 @@ abstract class Router
     protected Request $request;
     protected Route $route;
     protected array $uris;
-
+    
     public function __construct()
     {
         $this->request = Context::instance()->getRequest();
     }
 
+    abstract public function route(): ?string;
+
+    /**
+     * @param Route $route
+     * @return $this
+     */
     public function addRoute(Route $route): Router
     {
         $this->routes[$route->getUri()] = $route;
@@ -31,13 +37,26 @@ abstract class Router
         return $this->route;
     }
 
-    public function getUri($controller, $method){
+    /**
+     * @param $controller
+     * @param $method
+     * @return mixed|null
+     */
+    public function getUri($controller, $method): ?string
+    {
         if(isset($this->uris[$controller][$method])){
             return $this->uris[$controller][$method];
         }
+        
         return null;
     }
 
-    abstract public function route(): ?string;
+    /**
+     * @return array
+     */
+    public function getUris(): array
+    {
+        return $this->uris;
+    }
 
 }

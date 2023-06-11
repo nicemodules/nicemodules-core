@@ -15,9 +15,6 @@ class LangTest extends TestCase
 
     public function testGet()
     {
-        $locales = new Locales();
-        $locales->matchLocales();
-        die();
         $lang = new Lang('pl_PL');
         $lang->setDir(CoreModule::instance()->getLangDir());
         $this->assertEquals('Konfiguracja', $lang->get('Configuration'));

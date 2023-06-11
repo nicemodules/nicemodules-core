@@ -35,7 +35,7 @@ class Request
         return $default;
     }
 
-    public function sanitize($input, string $type)
+    public function sanitize($input, ?string $type)
     {
         if (is_array($input)) {
             foreach ($input as $key => $value) {

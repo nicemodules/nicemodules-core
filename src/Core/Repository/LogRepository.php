@@ -1,6 +1,6 @@
 <?php
 
-namespace NiceModules\CoreModule\Repository;
+namespace NiceModules\Core\Repository;
 
 use NiceModules\ORM\Repositories\BaseRepository;
 

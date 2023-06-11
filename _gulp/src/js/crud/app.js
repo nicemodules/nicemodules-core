@@ -10,7 +10,8 @@ const NiceModulesCrudApp = {
     },
     vuetify: function (crud) {
         const crudApp = this;
-
+        
+        
         crudApp.vue = new Vue({
             el: '#nm-crud',
             vuetify: new Vuetify({
@@ -18,11 +19,12 @@ const NiceModulesCrudApp = {
                     dark: false
                 },
                 lang: {
-                    locales: { lc: crud.translation },
+                    locales: {lc: crud.translation},
                     current: 'lc',
                 },
             }),
             data: {
+                app: crudApp,
                 editedItem: {},
                 editDialog: false,
                 items: [],
@@ -31,9 +33,11 @@ const NiceModulesCrudApp = {
                 count: 0,
                 options: crud.CrudOptions,
                 loading: false,
-                //filters: crud.filters,
+                filters: crud.filters,
+                translation: crud.translation,
+                locale: crud.locale,
             },
-            beforeMount: function beforeMount() {
+            beforeMount: function() {
 
             },
             methods: {
@@ -42,7 +46,7 @@ const NiceModulesCrudApp = {
                     this.editDialog = !this.editDialog
                 },
                 filterItems() {
-                    this.items = []
+                   alert('implement filter');
                 },
                 saveItem(item) {
 
@@ -55,32 +59,70 @@ const NiceModulesCrudApp = {
                         this.items.splice(idx, 1)
                     }
                 },
-                getData() {
+                getItems() {
                     const self = this;
                     this.loading = true;
+                    
+                    crudApp.log('CRUD options: ');
+                    crudApp.log(self.options);
+                    crudApp.log('Crud filters: ');
+                    crudApp.log(crud.filters);
+                    crudApp.log('CRUD uris: ');
+                    crudApp.log(crud.uris);
+                    
+                    jQuery.ajax({
+                        url: crud.uris['getItems'],
+                        data: {
+                            options: JSON.stringify(self.options), 
+                            filters: JSON.stringify(self.filters)
+                        },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            self.loading = false;
+                            self.items = data.items;
+                            self.count = data.count;
+                            
+                            console.log(data.count);
+                        },
+                        error: function error(jqXHR, exception) {
+                            self.handleAjaxError(jqXHR, exception);
+                        }
+                    });
 
-                    crudApp.log('SYNC');
+                   
+                },
+                handleAjaxError: function (jqXHR, exception) {
+                    var msg = '';
 
-                    crudApp.log(this.options);
-                    // call backend
-                    setTimeout(function () {
-                        self.loading = false;
-                        self.count = self.items.length;
-                    }, 2000);
+                    if (jqXHR.status === 0) {
+                        msg = 'Not connected.\n Verify Network.';
+                    } else if (jqXHR.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (jqXHR.status == 500) {
+                        msg = 'Internal Server Error [500]';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    }
 
-
-                }
+                    msg = msg + ', Response text: ' + jqXHR.responseText;
+                    crudApp.log(msg);
+                },
             },
             watch: {
                 options: {
                     handler() {
-                        this.getData()
+                        this.getItems()
                     },
                     deep: true,
                 },
                 items: {
                     handler: function handler(item, newItem) {
-                        this.count = this.items.length;
+                     
                     },
                     deep: true
                 },

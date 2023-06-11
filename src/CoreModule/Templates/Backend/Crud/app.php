@@ -13,12 +13,14 @@ $crud = json_encode($crud);
                 </h2>
 
                 <v-card>
-                    <v-data-table
+                    
+                    <v-data-table 
                             :headers="headers"
                             :items="items"
                             :options.sync="options"
                             :server-items-length="count"
                             :loading="loading"
+                            :auto-width="true"
                             :footer-props="{
                               'items-per-page-options': [10, 20, 50, 100] 
                             }"
@@ -26,10 +28,9 @@ $crud = json_encode($crud);
                             loading-text=""
                             
                     >
-
-<!--                        <template v-slot:top>-->
-<!--                            <crud-filters v-bind="filters"></crud-filters>-->
-<!--                        </template>-->
+                        <template v-if="filters" v-slot:top>
+                            <crud-filters :translation="translation" :filters="filters" :locale="locale"></crud-filters>
+                        </template>
 
 
 <!--                        <template v-slot:item.actions="{ item }">-->
@@ -58,46 +59,26 @@ $crud = json_encode($crud);
 
                        
                             
-                        <template v-slot:item.details="{ item }">
-                            <div class="text-truncate" >
-                                {{item.Details}}
-                            </div>
-                        </template>
-
-                        <template v-slot:item.url="{ item }">
-                            <div class="text-truncate">
-                                <a :href="item.URL" target="_new">{{item.URL}}</a>
-                            </div>
-                        </template>
+<!--                        <template v-slot:item.details="{ item }">-->
+<!--                            <div class="text-truncate" >-->
+<!--                                {{item.Details}}-->
+<!--                            </div>-->
+<!--                        </template>-->
+<!---->
+<!--                        <template v-slot:item.url="{ item }">-->
+<!--                            <div class="text-truncate">-->
+<!--                                <a :href="item.URL" target="_new">{{item.URL}}</a>-->
+<!--                            </div>-->
+<!--                        </template>-->
 
                     </v-data-table>
-                    
-<!--                    <div class="text-center pt-2">-->
-<!---->
-<!--                        <v-pagination-->
-<!--                                v-model="CrudOptions.page"-->
-<!--                                :length="CrudOptions.perPage"-->
-<!--                        ></v-pagination>-->
-<!---->
-<!--                        <v-text-field-->
-<!--                                :value="itemsPerPage"-->
-<!--                                label="Items per page"-->
-<!--                                type="number"-->
-<!--                                min="-1"-->
-<!--                                max="15"-->
-<!--                                @input="itemsPerPage = parseInt($event, 10)"-->
-<!--                        ></v-text-field>-->
-<!---->
-<!--                    </div>-->
 
-                    <!-- this dialog is used for both create and update -->
-
-<!--                    <v-dialog v-model="dialog" max-width="500px">-->
+<!--                    <v-dialog v-model="dialog" max-width="800px">-->
 <!---->
 <!--                        <template v-slot:activator="{ on }">-->
 <!--                            <div class="d-flex">-->
 <!--                                <v-btn color="primary" class="ml-auto ma-3" v-on="on">-->
-<!--                                    Dodaj-->
+<!--                                    {{ translation.buttons.add }}-->
 <!--                                    <v-icon small>mdi-plus-circle-outline</v-icon>-->
 <!--                                </v-btn>-->
 <!--                            </div>-->
@@ -124,7 +105,7 @@ $crud = json_encode($crud);
 <!---->
 <!--                            <v-card-actions>-->
 <!--                                <v-spacer></v-spacer>-->
-<!--                                <v-btn color="blue " text @click="showEditDialog()">Cancel</v-btn>-->
+<!--                                <v-btn color="blue" text @click="showEditDialog()">Cancel</v-btn>-->
 <!--                                <v-btn color="blue" text @click="saveItem(editedItem)">Save</v-btn>-->
 <!--                            </v-card-actions>-->
 <!--                        </v-card>-->

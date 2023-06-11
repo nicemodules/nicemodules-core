@@ -52,6 +52,7 @@ class CrudBuilder
         $this->crud->setOptions($fieldList);
         
         $fields = [];
+        $filters = [];
         $headers = [];
         foreach ($reflector->getProperties() as $property) {
             // Get the annotations of this property.
@@ -59,13 +60,24 @@ class CrudBuilder
 
             // Silently ignore properties that do not have the annotation
             if ($field && isset($field->type)) {
+                $field->name = $property->name;
+                
                 // Register annotation 
-                $fields[$property->name] = $field;
+                if($field->editable){
+                    $fields[$property->name] = $field;    
+                }
+                
+                if($field->filterable){
+                    $filters[$property->name] = $field;    
+                }
+                
+                
                 $headers[] = new CrudHeader($field->label, $property->name, $field->type, $field->sortable);
             }
         }
 
         $this->crud->setFields($fields);
+        $this->crud->setFilters($filters);
         $this->crud->setHeaders($headers);
     }
 
