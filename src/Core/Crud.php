@@ -5,8 +5,6 @@ namespace NiceModules\Core;
 use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Crud\CrudTranslation;
-use NiceModules\ORM\Manager;
-use NiceModules\ORM\Models\BaseModel;
 
 class Crud
 {
@@ -33,7 +31,8 @@ class Crud
     public string $locale;
     
     protected string $class;
-
+    
+   
     public function __construct($modelClassName)
     {
         $this->class = $modelClassName;
@@ -57,6 +56,7 @@ class Crud
     public function setOptions(CrudOptions $options): Crud
     {
         $this->CrudOptions = $options;
+        
         return $this;
     }
 

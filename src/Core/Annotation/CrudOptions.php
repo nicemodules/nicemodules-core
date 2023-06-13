@@ -15,7 +15,7 @@ class CrudOptions
      * @var CrudOrder[]
      */
     public array $order;
-    public int $itemsPerPage = 20;
+    public int $itemsPerPage = 10;
     public int $page = 1;
     /**
      * @var string[]
@@ -26,21 +26,6 @@ class CrudOptions
      */
     public array $sortDesc;
     public bool $multiSort = false;
-
-
-    public function __construct(array $values)
-    {
-        $lang = Context::instance()->getLang();
-        
-        foreach ($values as $name => $value) {
-            switch ($name) {
-                case 'title':
-                    $this->$name = $lang->get($value);
-                    break;
-                default:
-                    $this->$name = $value;
-                    break;
-            }
-        }
-    }
+    public bool $allowAdd = true; 
+    public bool $allowDelete = true; 
 }

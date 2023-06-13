@@ -10,7 +10,7 @@ use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
- * @CrudOptions(title="Log", sortBy={"date_add"}, sortDesc={true})
+ * @CrudOptions(title="Log", sortBy={"date_add"}, sortDesc={true}, allowAdd=false)
  * 
  * @Table(
  *     type="Entity",
@@ -22,7 +22,7 @@ use NiceModules\ORM\Annotations\Table;
  *      },
  *     repository="NiceModules\Core\Repository\LogRepository",
  *     inherits="NiceModules\Core\Model"
- *     );
+ *     )
  */
 class Log extends Model
 {
@@ -35,12 +35,12 @@ class Log extends Model
 
     /**
      * @Column(type="varchar", length="20")
-     * @CrudField(label="Type", type="text", editable=false)
+     * @CrudField(label="Type", type="select", editable=false, options={"message", "ERROR", "WARNING"})
      */
     protected string $type;
 
     /**
-     * @Column(type="varchar", length="20")
+     * @Column(type="varchar", length="255")
      * @CrudField(label="Source", type="text", editable=false)
      */
     protected string $source;

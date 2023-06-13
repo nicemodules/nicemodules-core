@@ -100,7 +100,7 @@
      # Forms
      # ================================================================= */
 
-  input {
+  input, select, textarea {
     &:focus{
       border: none;
       box-shadow: none;

@@ -58339,10 +58339,19 @@ Vue.component('crud-filters', {
   template: '#crud-filters',
   data: function data() {
     return {
-      pickers: {}
+      pickers: {},
+      expandFilters: false,
+      filterClass: 'default--text'
     };
   },
   methods: {
+    clearFilters: function clearFilters() {
+      for (var name in this.filters) {
+        this.filters[name].value = null;
+      }
+      this.filterClass = 'default--text';
+      this.filterItems();
+    },
     filterItems: function filterItems() {
       this.$root.getItems();
     },
@@ -58352,13 +58361,68 @@ Vue.component('crud-filters', {
     clearPicker: function clearPicker(ref) {
       this.filters[ref].value = '';
       this.pickers[ref] = false;
+    },
+    changeFilter: function changeFilter(filter) {
+      this.checkFiltersActive();
+    },
+    checkFiltersActive: function checkFiltersActive() {
+      for (var name in this.filters) {
+        if (this.filters[name].value) {
+          this.filterClass = 'primary--text';
+          return;
+        }
+      }
+      this.filterClass = 'default--text';
     }
   },
   mounted: function mounted() {
-    console.log(this.locale);
-    for (var filter in this.filters) {
-      if (filter.type === 'date') {
-        this.pickers[filter.name] = false;
+    for (var name in this.filters) {
+      if (this.filters[name].value) {
+        this.expandFilters = true;
+      }
+      if (this.filters[name].type === 'date') {
+        this.pickers[name] = false;
+      }
+    }
+    this.checkFiltersActive();
+  },
+  watch: {}
+});
+"use strict";
+
+Vue.component('crud-edit', {
+  props: ['translation', 'fields', 'get_item', 'edit', 'locale'],
+  template: '#crud-edit',
+  data: function data() {
+    return {
+      add: false,
+      item: {},
+      editActive: false
+    };
+  },
+  methods: {
+    save: function save(item) {},
+    cancel: function cancel() {
+      this.editActive = false;
+    }
+  },
+  mounted: function mounted() {
+    this.add = this.$root.options.allowAdd;
+  },
+  watch: {
+    edit: {
+      handler: function handler() {
+        this.item = this.edit ? Object.assign({}, this.get_item()) : {};
+        if (this.edit) {
+          this.editActive = true;
+        }
+      }
+    },
+    editActive: {
+      handler: function handler() {
+        if (!this.editActive) {
+          this.$root.edit = false;
+        }
       }
     }
   }
@@ -58391,9 +58455,6 @@ var NiceModulesCrudApp = {
         }
       }),
       data: {
-        app: crudApp,
-        editedItem: {},
-        editDialog: false,
         items: [],
         fields: crud.fields,
         headers: crud.headers,
@@ -58402,16 +58463,21 @@ var NiceModulesCrudApp = {
         loading: false,
         filters: crud.filters,
         translation: crud.translation,
-        locale: crud.locale
+        locale: crud.locale,
+        editDialog: false,
+        deleteDialog: false,
+        edit: false,
+        editedItem: {}
       },
       beforeMount: function beforeMount() {},
+      mounted: function mounted() {},
       methods: {
         editItem: function editItem(item) {
           this.editedItem = item || {};
-          this.editDialog = !this.editDialog;
+          this.edit = !this.edit;
         },
-        filterItems: function filterItems() {
-          alert('implement filter');
+        getEditedItem: function getEditedItem() {
+          return this.editedItem;
         },
         saveItem: function saveItem(item) {},
         deleteItem: function deleteItem(item) {
@@ -58420,10 +58486,9 @@ var NiceModulesCrudApp = {
           var idx = this.items.findIndex(function (item) {
             return item.id === id;
           });
-          if (confirm('Are you sure you want to delete this?')) {
-            this.items.splice(idx, 1);
-          }
         },
+        deleteConfirm: function deleteConfirm(item) {},
+        closeDelete: function closeDelete() {},
         getItems: function getItems() {
           var self = this;
           this.loading = true;

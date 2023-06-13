@@ -7,111 +7,105 @@ $crud = json_encode($crud);
     <div id="nm-crud">
         <v-app>
             <v-content class="container align-center px-1">
-
-                <h2 class="font-weight-light mb-2">
-                    {{ options.title }}
-                </h2>
-
+             
                 <v-card>
+                    <crud-filters v-if="filters"
+                                  :translation="translation"
+                                  :filters="filters"
+                                  :locale="locale"
+                    ></crud-filters>
                     
-                    <v-data-table 
-                            :headers="headers"
-                            :items="items"
-                            :options.sync="options"
-                            :server-items-length="count"
-                            :loading="loading"
-                            :auto-width="true"
-                            :footer-props="{
+                    <v-row>
+                        <v-col cols="12">
+                            
+                            <v-data-table
+                                    :headers="headers"
+                                    :items="items"
+                                    :options.sync="options"
+                                    :server-items-length="count"
+                                    :loading="loading"
+                                    :auto-width="true"
+                                    :footer-props="{
                               'items-per-page-options': [10, 20, 50, 100] 
                             }"
-                            class="elevation-1"
-                            loading-text=""
-                            
-                    >
-                        <template v-if="filters" v-slot:top>
-                            <crud-filters :translation="translation" :filters="filters" :locale="locale"></crud-filters>
-                        </template>
+                                    class="elevation-0"
+                                    loading-text=""
+
+                            >
+
+                                <template v-slot:top>
 
 
-<!--                        <template v-slot:item.actions="{ item }">-->
-<!---->
-<!--                            <div class="text-truncate">-->
-<!--                                <v-icon-->
-<!--                                        small-->
-<!--                                        class="mr-2"-->
-<!--                                        @click="showEditDialog(item)"-->
-<!--                                        color="primary"-->
-<!--                                >-->
-<!--                                    mdi-pencil-->
-<!--                                </v-icon>-->
-<!---->
-<!--                                <v-icon-->
-<!--                                        small-->
-<!--                                        @click="deleteItem(item)"-->
-<!--                                        color="pink"-->
-<!--                                >-->
-<!--                                    mdi-delete-->
-<!--                                </v-icon>-->
-<!--                            </div>-->
-<!---->
-<!--                        </template>-->
+                                    <v-toolbar flat>
+                                        <v-toolbar-title>
+                                            {{ options.title }}
+                                        </v-toolbar-title>
+
+                                        <v-divider
+                                                class="mx-4"
+                                                inset
+                                                vertical
+                                        ></v-divider>
+
+                                        <v-spacer></v-spacer>
 
 
-                       
-                            
-<!--                        <template v-slot:item.details="{ item }">-->
-<!--                            <div class="text-truncate" >-->
-<!--                                {{item.Details}}-->
-<!--                            </div>-->
-<!--                        </template>-->
-<!---->
-<!--                        <template v-slot:item.url="{ item }">-->
-<!--                            <div class="text-truncate">-->
-<!--                                <a :href="item.URL" target="_new">{{item.URL}}</a>-->
-<!--                            </div>-->
-<!--                        </template>-->
+                                        <crud-edit v-if="fields"
+                                                   :translation="translation"
+                                                   :fields="fields"
+                                                   :get_item="getEditedItem"
+                                                   :edit="edit"
+                                                   :locale="locale">
+                                        </crud-edit>
 
-                    </v-data-table>
 
-<!--                    <v-dialog v-model="dialog" max-width="800px">-->
-<!---->
-<!--                        <template v-slot:activator="{ on }">-->
-<!--                            <div class="d-flex">-->
-<!--                                <v-btn color="primary" class="ml-auto ma-3" v-on="on">-->
-<!--                                    {{ translation.buttons.add }}-->
-<!--                                    <v-icon small>mdi-plus-circle-outline</v-icon>-->
-<!--                                </v-btn>-->
-<!--                            </div>-->
-<!--                        </template>-->
-<!---->
-<!--                        <v-card>-->
-<!--                            <v-card-title>-->
-<!--                                <span v-if="editedItem.id">Edit {{editedItem.id}}</span>-->
-<!--                                <span v-else>Create</span>-->
-<!--                            </v-card-title>-->
-<!--                            <v-card-text>-->
-<!--                                <v-row>-->
-<!--                                    <v-col cols="12" sm="4">-->
-<!--                                        <v-text-field v-model="editedItem.Name" label="Name"></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="8">-->
-<!--                                        <v-text-field v-model="editedItem.Details" label="Details"></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                    <v-col cols="12" sm="12">-->
-<!--                                        <v-text-field v-model="editedItem.URL" label="URL"></v-text-field>-->
-<!--                                    </v-col>-->
-<!--                                </v-row>-->
-<!--                            </v-card-text>-->
-<!---->
-<!--                            <v-card-actions>-->
-<!--                                <v-spacer></v-spacer>-->
-<!--                                <v-btn color="blue" text @click="showEditDialog()">Cancel</v-btn>-->
-<!--                                <v-btn color="blue" text @click="saveItem(editedItem)">Save</v-btn>-->
-<!--                            </v-card-actions>-->
-<!--                        </v-card>-->
-<!---->
-<!--                    </v-dialog>-->
+                                    </v-toolbar>
 
+                                </template>
+
+                                <template v-slot:item.actions="{ item }">
+                                    <div class="text-truncate">
+                                        <v-icon
+                                                small
+                                                class="mr-2"
+                                                @click="editItem(item)"
+                                                color="primary"
+                                        >
+                                            mdi-pencil
+                                        </v-icon>
+                                        <v-icon v-if="options.allowDelete"
+                                                small
+                                                @click="deleteItem(item)"
+                                                color="red"
+                                        >
+                                            mdi-delete
+                                        </v-icon>
+                                    </div>
+                                </template>
+
+                            </v-data-table>
+
+                            <v-dialog v-model="deleteDialog" max-width="800px">
+                                <v-card>
+                                    <v-card-title class="text-h5">{{ translation.messages.confirmDelete }}
+                                    </v-card-title>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" text @click="closeDelete">{{
+                                            translation.buttons.cancel
+                                            }}
+                                        </v-btn>
+                                        <v-btn color="blue darken-1" text @click="deleteConfirm">{{
+                                            translation.buttons.ok }}
+                                        </v-btn>
+                                        <v-spacer></v-spacer>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-col>
+
+
+                    </v-row>
                 </v-card>
             </v-content>
         </v-app>

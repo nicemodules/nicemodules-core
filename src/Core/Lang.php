@@ -103,11 +103,10 @@ class Lang
     {
         $locales = new Locales();
         $localeLang = $locales->getLocaleLang($this->locale);
-
+        
         if ($this->needTranslation() && $this->getTranslator()->getCatalogue()->has($text, $this->domain)) {
             return $this->getTranslator()->getCatalogue()->get($text, $this->domain);
-        } elseif (isset($this->service)  && $localeLang) { // add translation using deepL service if not exist
-    
+        } elseif ($this->needTranslation() && isset($this->service)  && $localeLang) { // add translation using deepL service if not exist
             try{
                 $result = $this->service->get($text, $localeLang);
             }catch (\Throwable $e){

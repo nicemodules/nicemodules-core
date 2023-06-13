@@ -23,23 +23,8 @@ class CrudField
     public bool $editable = true;
     public bool $filterable = true;
     public bool $sortable = true;
+    public array $options = [];
     public $value;
 
     public array $subFields = [];
-
-    public function __construct(array $values)
-    {
-        $lang = Context::instance()->getLang();
-
-        foreach ($values as $name => $value) {
-            switch ($name) {
-                case 'label':
-                    $this->$name = $lang->get($value);
-                    break;
-                default:
-                    $this->$name = $value;
-                    break;
-            }
-        }
-    }
 }

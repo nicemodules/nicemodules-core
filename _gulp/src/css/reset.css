@@ -96,9 +96,9 @@
     bottom: -0.25em; }
   .nm-app sup {
     top: -0.5em; }
-  .nm-app input {
+  .nm-app input, .nm-app select, .nm-app textarea {
     border-radius: 0; }
-    .nm-app input:focus {
+    .nm-app input:focus, .nm-app select:focus, .nm-app textarea:focus {
       border: none;
       box-shadow: none; }
   .nm-app [disabled] {

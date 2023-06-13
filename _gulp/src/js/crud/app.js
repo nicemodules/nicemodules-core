@@ -11,7 +11,6 @@ const NiceModulesCrudApp = {
     vuetify: function (crud) {
         const crudApp = this;
         
-        
         crudApp.vue = new Vue({
             el: '#nm-crud',
             vuetify: new Vuetify({
@@ -24,9 +23,6 @@ const NiceModulesCrudApp = {
                 },
             }),
             data: {
-                app: crudApp,
-                editedItem: {},
-                editDialog: false,
                 items: [],
                 fields: crud.fields,
                 headers: crud.headers,
@@ -36,17 +32,24 @@ const NiceModulesCrudApp = {
                 filters: crud.filters,
                 translation: crud.translation,
                 locale: crud.locale,
+                editDialog: false,
+                deleteDialog: false,
+                edit: false,
+                editedItem: {},
             },
-            beforeMount: function() {
+            beforeMount() {
 
+            },
+            mounted(){
+                
             },
             methods: {
                 editItem(item) {
-                    this.editedItem = item || {}
-                    this.editDialog = !this.editDialog
+                    this.editedItem = item || {};
+                    this.edit = !this.edit;
                 },
-                filterItems() {
-                   alert('implement filter');
+                getEditedItem(){
+                    return this.editedItem;
                 },
                 saveItem(item) {
 
@@ -55,9 +58,12 @@ const NiceModulesCrudApp = {
                     //console.log('deleteItem', item)
                     let id = item.id
                     let idx = this.items.findIndex(item => item.id === id)
-                    if (confirm('Are you sure you want to delete this?')) {
-                        this.items.splice(idx, 1)
-                    }
+                },
+                deleteConfirm(item){
+                    
+                },
+                closeDelete(){
+                    
                 },
                 getItems() {
                     const self = this;

@@ -88,7 +88,11 @@ class CrudTranslation
                 'delete' => $l->get('Delete'),
                 'edit' => $l->get('Edit'),
                 'ok' => $l->get('OK'),
+                'clear' => $l->get('Clear'),
             ],
+            'messages'=> [
+                'confirmDelete' => $l->get('Are you sure you want to delete this?')
+            ]
         ];
     }
 }

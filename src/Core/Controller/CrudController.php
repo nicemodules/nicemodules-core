@@ -63,6 +63,7 @@ abstract class CrudController extends Controller
         $crud->addUri('getItems', $this->getAjaxUri('getItems'));
 
         $this->templates = [
+            new Template('Backend/Crud/edit'),
             new Template('Backend/Crud/filters'),
             new Template(
                 'Backend/Crud/app',
@@ -134,6 +135,12 @@ abstract class CrudController extends Controller
                                     $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeFrom, '>=');
                                     $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeTo, '<=');
                                 }
+                            }
+                            break;
+                        case CrudField::TYPE_TEXT:
+                            {
+                                $words = explode(' ', $filter->value);
+                                $queryBuilder->where($filter->name, '%'.implode('%', $words).'%', 'LIKE');
                             }
                             break;
                         default:

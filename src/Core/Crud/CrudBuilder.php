@@ -5,8 +5,10 @@ namespace NiceModules\Core\Crud;
 use Doctrine\Common\Annotations\AnnotationReader;
 use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudOptions;
+use NiceModules\Core\Context;
 use NiceModules\Core\Controller\CrudController;
 use NiceModules\Core\Crud;
+use NiceModules\Core\Lang;
 use ReflectionClass;
 use ReflectionException;
 
@@ -18,9 +20,12 @@ class CrudBuilder
     protected AnnotationReader $reader;
     protected ReflectionClass $reflector;
     protected CrudController $controller;
+    protected Lang $lang;
+
 
     public function __construct(CrudController $controller)
     {
+        $this->lang = Context::instance()->getLang();
         $this->class = $controller->getModelClass();
         $this->controller = $controller;
     }
@@ -47,9 +52,10 @@ class CrudBuilder
         $reflector = $this->getReflector();
 
         // Get the annotation reader instance
-        $fieldList = $this->getReader()->getClassAnnotation($reflector, CrudOptions::class);
+        $options = $this->getReader()->getClassAnnotation($reflector, CrudOptions::class);
 
-        $this->crud->setOptions($fieldList);
+        // Translate title
+        $options->title = $this->lang->get($options->title);
         
         $fields = [];
         $filters = [];
@@ -57,9 +63,12 @@ class CrudBuilder
         foreach ($reflector->getProperties() as $property) {
             // Get the annotations of this property.
             $field = $this->getPropertyAnnotations($reflector, $property->name);
-
+            
             // Silently ignore properties that do not have the annotation
             if ($field && isset($field->type)) {
+                // Translate label
+                $field->label = $this->lang->get($field->label);
+                
                 $field->name = $property->name;
                 
                 // Register annotation 
@@ -71,11 +80,16 @@ class CrudBuilder
                     $filters[$property->name] = $field;    
                 }
                 
-                
                 $headers[] = new CrudHeader($field->label, $property->name, $field->type, $field->sortable);
             }
         }
-
+        
+        // Set crud properties
+        if($fields){
+            $headers[] = new CrudHeader('', 'actions', 'actions', false);
+        }
+        
+        $this->crud->setOptions($options);
         $this->crud->setFields($fields);
         $this->crud->setFilters($filters);
         $this->crud->setHeaders($headers);

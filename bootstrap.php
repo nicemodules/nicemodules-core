@@ -2,11 +2,11 @@
 
 namespace NiceModules;
 
+use NiceModules\Core\Controller\LogController;
 use NiceModules\Core\Plugin\MenuLink;
 use NiceModules\Core\Plugin\Resource;
 use NiceModules\Core\Router\Route;
 use NiceModules\CoreModule\Backend\Controller\ConfigController;
-use NiceModules\Core\Controller\LogController;
 use NiceModules\CoreModule\Backend\CoreBackendPlugin;
 use NiceModules\CoreModule\CoreModule;
 use NiceModules\CoreModule\Frontend\Controller\TestingController;
@@ -25,11 +25,17 @@ if (is_admin()) {
     $router = $coreAdminPlugin->getRouter();
 
     // Define rotes
-    $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
-        ->addRoute(new Route('nm_config_save', ConfigController::class, 'listSave', true))
+    $router
         ->addRoute(new Route('nm_log', LogController::class, 'list'))
         ->addRoute(new Route('nm_log_data', LogController::class, 'getItems', true))
-        ->addRoute(new Route('nm_index', ConfigController::class, 'list'));
+        ->addRoute(new Route('nm_index', LogController::class, 'list'))
+    ;
+
+    if (WP_DEBUG) {
+        $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
+            ->addRoute(new Route('nm_config_data', ConfigController::class, 'getItems', true))
+            ;
+    }
     
     // Add resources
     if(WP_DEBUG){
