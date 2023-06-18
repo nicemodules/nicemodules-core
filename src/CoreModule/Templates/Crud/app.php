@@ -1,4 +1,5 @@
 <?php
+
 /** @var string $crud */
 $crud = json_encode($crud);
 ?>
@@ -6,17 +7,17 @@ $crud = json_encode($crud);
     <div id="nm-crud">
         <v-app>
             <v-content class="container align-center px-1">
-             
-                <v-card>
-                    <crud-filters v-if="filters"
+
+                <v-card class="mx-auto">
+                    <crud-filters v-if="hasFilters"
                                   :translation="translation"
                                   :filters="filters"
                                   :locale="locale"
                     ></crud-filters>
-                    
-                    <v-row>
+
+      
                         <v-col cols="12">
-                            
+
                             <v-data-table
                                     v-model="selectedItems"
                                     :headers="headers"
@@ -35,7 +36,7 @@ $crud = json_encode($crud);
                             >
 
                                 <template v-slot:top>
-                                    
+
                                     <v-toolbar flat>
                                         <v-toolbar-title>
                                             {{ options.title }}
@@ -48,10 +49,10 @@ $crud = json_encode($crud);
                                         ></v-divider>
 
                                         <v-spacer></v-spacer>
-                                        
+
                                         <crud-top-button-actions :actions="options.topButtonActions"
                                         ></crud-top-button-actions>
-                                        
+
                                         <crud-edit v-if="fields"
                                                    :translation="translation"
                                                    :fields="fields"
@@ -59,16 +60,41 @@ $crud = json_encode($crud);
                                                    :edit="edit"
                                                    :locale="locale">
                                         </crud-edit>
-                                        
+
                                     </v-toolbar>
 
                                 </template>
-
-                                <template v-slot:item.actions="{ item }">
-                                    <crud-item-actions :item="item" :actions="options.itemActions"></crud-item-actions>
+                                
+                                <template v-for="header of headers" v-slot:[`item.${header.value}`]="{ item }">
+                                    
+                                    <template v-if="header.type == 'checkbox'">
+                                        <template v-if="item[header.value]">
+                                            <v-icon color="success">mdi-check-circle</v-icon>
+                                        </template>
+                                        <template v-else>
+                                            <v-icon color="error">mdi-close-circle</v-icon>
+                                        </template>
+                                    </template>
+                                    
+                                    <template v-else-if="header.type == 'actions'">
+                                        <crud-item-actions :item="item" :actions="options.itemActions"></crud-item-actions>
+                                    </template>
+                                    
+                                    <template v-else>
+                                        {{ item[header.value] }}
+                                    </template>
                                 </template>
-
+                                
                             </v-data-table>
+
+                            <template>
+                                <crud-bulk-actions v-if="options.bulk"
+                                                   :translation="translation"
+                                                   :actions="options.bulkActions">
+                                </crud-bulk-actions>
+
+
+                            </template>
 
                             <v-dialog v-model="confirm" max-width="500px">
                                 <v-card>
@@ -87,10 +113,35 @@ $crud = json_encode($crud);
                                     </v-card-actions>
                                 </v-card>
                             </v-dialog>
-                            
                         </v-col>
-                        
-                    </v-row>
+       
+
+                    <template>
+                        <div class="text-center">
+                            <v-snackbar
+                                    :timeout="2000"
+                                    v-model="snackbars.success.active"
+                                    :multi-line="true"
+                                    shaped
+                                    color="success"
+                                    bottom
+                            >
+                                {{ snackbars.success.text }}
+                            </v-snackbar>
+
+                            <v-snackbar
+                                    :timeout="2000"
+                                    v-model="snackbars.error.active"
+                                    :multi-line="true"
+                                    shaped
+                                    color="error"
+                                    bottom
+                            >
+                                {{ snackbars.error.text }}
+                            </v-snackbar>
+                        </div>
+                    </template>
+
                 </v-card>
             </v-content>
         </v-app>

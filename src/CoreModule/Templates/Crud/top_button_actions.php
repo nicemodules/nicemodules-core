@@ -1,5 +1,4 @@
 <script type="text/x-template" id='crud-top-button-actions'>
-
     <v-row justify="end">
         <template v-for="action of actions">
 

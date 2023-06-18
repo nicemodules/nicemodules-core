@@ -15,8 +15,7 @@ class Locales
             DIRECTORY_SEPARATOR . 'static' . DIRECTORY_SEPARATOR . 'locale-lang.json';
         $this->localeLang = json_decode(file_get_contents($this->file), true);
     }
-
-
+    
     /**
      * Returns DeepL language shortcut for given WordPress locale
      * @param string $locale
@@ -31,7 +30,7 @@ class Locales
         return null;
     }
 
-    protected function getLangs(): array
+    public function getLangs(): array
     {
         return [
             'BG' => 'Bulgarian',
@@ -39,7 +38,7 @@ class Locales
             'DA' => 'Danish',
             'DE' => 'German',
             'EL' => 'Greek',
-            'EN' => 'English (unspecified variant for backward compatibility; please select EN-GB or EN-US instead)',
+            'EN' => 'English',
             'EN-GB' => 'English (British)',
             'EN-US' => 'English (American)',
             'ES' => 'Spanish',
@@ -56,7 +55,7 @@ class Locales
             'NB' => 'Norwegian (Bokmål)',
             'NL' => 'Dutch',
             'PL' => 'Polish',
-            'PT' => 'Portuguese (unspecified variant for backward compatibility; please select PT-BR or PT-PT instead)',
+            'PT' => 'Portuguese',
             'PT-BR' => 'Portuguese (Brazilian)',
             'PT-PT' => 'Portuguese (all Portuguese varieties excluding Brazilian Portuguese)',
             'RO' => 'Romanian',
@@ -68,6 +67,11 @@ class Locales
             'UK' => 'Ukrainian',
             'ZH' => 'Chinese (simplified)',
         ];
+    }
+
+    public function getLangName($name): ?string
+    {
+        return $this->getLangs()[$name] ?? null;
     }
 
     protected function getLocaleLangs(): array

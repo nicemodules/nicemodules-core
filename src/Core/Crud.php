@@ -13,26 +13,26 @@ class Crud
      * @var CrudField[]
      */
     public array $fields;
-    
+
     /**
      * @var CrudField[]
      */
     public array $filters;
-    
+
     /**
      * @var string[]
      */
     public array $headers;
-    
+
     public array $translation;
-    
+
     public array $uris;
-    
+
     public string $locale;
-    
+
     protected string $class;
-    
-   
+
+
     public function __construct($modelClassName)
     {
         $this->class = $modelClassName;
@@ -56,7 +56,7 @@ class Crud
     public function setOptions(CrudOptions $options): Crud
     {
         $this->CrudOptions = $options;
-        
+
         return $this;
     }
 
@@ -66,6 +66,15 @@ class Crud
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+    /**
+     * @param $property
+     * @return CrudField
+     */
+    public function getField($property): CrudField
+    {
+        return $this->fields[$property];
     }
 
     /**
@@ -104,8 +113,9 @@ class Crud
         $this->headers = $headers;
         return $this;
     }
-    
-    public function addUri($method, $uri){
+
+    public function addUri($method, $uri)
+    {
         $this->uris[$method] = $uri;
     }
 
@@ -123,5 +133,10 @@ class Crud
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    public function getFilter($proprety): CrudField
+    {
+        return $this->filters[$proprety];
     }
 }

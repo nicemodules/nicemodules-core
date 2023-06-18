@@ -25,7 +25,7 @@ use NiceModules\ORM\Annotations\Table;
  *      @CrudTopButtonAction(name="edit", label="Add", icon="mdi-plus-circle-outline")
  *      },
  *     bulkActions={
- *      @CrudBulkAction(name="bulkDelete", label="Dleete", icon="mdi-plus-circle-outline", confirm="Are you sure you want to delete this?")
+ *      @CrudBulkAction(name="bulkDelete", label="Dlete", icon="mdi-delete", color="red lighten-4", confirm="Are you sure you want to delete this?")
  *      }
  *     )
  *

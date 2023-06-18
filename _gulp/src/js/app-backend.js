@@ -127,6 +127,26 @@ Vue.component('crud-top-button-actions', {
 });
 "use strict";
 
+Vue.component('crud-bulk-actions', {
+  props: ['translation', 'actions'],
+  template: '#crud-bulk-actions',
+  data: function data() {
+    return {};
+  },
+  methods: {
+    buttonAction: function buttonAction(action) {
+      if (!this.$root.selectedItems.length) {
+        this.$root.snackbarError([this.translation.messages.unselected]);
+        return;
+      }
+      this.$root.executeAction(this.$root.selectedItems, action);
+    }
+  },
+  mounted: function mounted() {},
+  watch: {}
+});
+"use strict";
+
 var NiceModulesCrudApp = {
   debug: true,
   run: function run(params) {
@@ -160,16 +180,33 @@ var NiceModulesCrudApp = {
         options: crud.CrudOptions,
         loading: false,
         filters: crud.filters,
+        hasFilters: false,
         translation: crud.translation,
         locale: crud.locale,
         deleteDialog: false,
         edit: false,
         confirm: false,
         calledAction: {},
-        selectedItems: []
+        selectedItems: [],
+        snackbars: {
+          success: {
+            text: '',
+            active: false
+          },
+          error: {
+            text: '',
+            active: false
+          }
+        },
+        status: {
+          error: 0,
+          success: 1
+        }
       },
       beforeMount: function beforeMount() {},
-      mounted: function mounted() {},
+      mounted: function mounted() {
+        this.hasFilters = Object.keys(this.filters).length;
+      },
       methods: {
         executeAction: function executeAction(subject, action) {
           this.calledAction = action;
@@ -197,12 +234,19 @@ var NiceModulesCrudApp = {
           jQuery.ajax({
             url: self.calledAction.uri,
             data: {
-              item: JSON.stringify(self.calledAction.subject)
+              subject: JSON.stringify(self.calledAction.subject)
             },
             type: 'POST',
             dataType: 'json',
             success: function success(data) {
-              // TODO: add success message
+              crudApp.log('RESPOSE:');
+              crudApp.log(data);
+              if (data.status === self.status.success) {
+                self.snackbarSuccess(data.messages);
+              }
+              if (data.status === self.status.error) {
+                self.snackbarError(data.messages);
+              }
               self.getItems();
             },
             error: function error(jqXHR, exception) {
@@ -238,12 +282,21 @@ var NiceModulesCrudApp = {
               self.loading = false;
               self.items = data.items;
               self.count = data.count;
-              console.log(data.count);
             },
             error: function error(jqXHR, exception) {
               self.handleAjaxError(jqXHR, exception);
             }
           });
+        },
+        snackbarSuccess: function snackbarSuccess(messages) {
+          this.snackbars.success.active = true;
+          this.snackbars.success.text = messages.join('<br>');
+          crudApp.log('SNACKBAR:: ');
+          crudApp.log(this.snackbars.success);
+        },
+        snackbarError: function snackbarError(messages) {
+          this.snackbars.error.active = true;
+          this.snackbars.error.text = messages.join('<br>');
         },
         handleAjaxError: function handleAjaxError(jqXHR, exception) {
           var msg = '';

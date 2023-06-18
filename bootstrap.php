@@ -2,6 +2,7 @@
 
 namespace NiceModules;
 
+use NiceModules\Core\Controller\LanguageController;
 use NiceModules\Core\Controller\LogController;
 use NiceModules\Core\Plugin\MenuLink;
 use NiceModules\Core\Plugin\Resource;
@@ -29,6 +30,11 @@ if (is_admin()) {
         ->addRoute(new Route('nm_log', LogController::class, 'list'))
         ->addRoute(new Route('nm_log_data', LogController::class, 'getItems', true))
         ->addRoute(new Route('nm_index', LogController::class, 'list'))
+        ->addRoute(new Route('nm_language', LanguageController::class, 'list'))
+        ->addRoute(new Route('nm_language_data', LanguageController::class, 'getItems', true))
+        ->addRoute(new Route('nm_language_edit', LanguageController::class, 'edit', true))
+        ->addRoute(new Route('nm_language_delete', LanguageController::class, 'delete', true))
+   
     ;
 
     if (WP_DEBUG) {
@@ -36,6 +42,7 @@ if (is_admin()) {
             ->addRoute(new Route('nm_config_data', ConfigController::class, 'getItems', true))
             ->addRoute(new Route('nm_config_edit', ConfigController::class, 'edit', true))
             ->addRoute(new Route('nm_config_delete', ConfigController::class, 'delete', true))
+            ->addRoute(new Route('nm_config_bulk_delete', ConfigController::class, 'bulkDelete', true))
             ;
     }
     
@@ -60,7 +67,8 @@ if (is_admin()) {
     $coreAdminPlugin
         ->addMenuLink($mainLink)
         ->addMenuLink(new MenuLink('Config', 'Config', 'nm_config', $mainLink))
-        ->addMenuLink(new MenuLink('Log', 'Log', 'nm_log', $mainLink));
+        ->addMenuLink(new MenuLink('Log', 'Log', 'nm_log', $mainLink))
+        ->addMenuLink(new MenuLink('Languages', 'Languages', 'nm_language', $mainLink));
     
     // WpModule installation
     register_activation_hook(

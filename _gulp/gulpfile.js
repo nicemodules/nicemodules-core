@@ -21,6 +21,7 @@ const config = { // The file names are without extensions, but the extensions wi
             'crud/edit',
             'crud/item_actions',
             'crud/top_button_actions',
+            'crud/bulk_actions',
             'crud/app'
         ],
         concat_js: [ // This files will be concatenated into one js bundle.

@@ -7,7 +7,7 @@ Vue.component('crud-item-actions', {
     },
     methods: {
         itemAction(item, action) {
-            this.$root.executeAction(item, action)
+            this.$root.executeAction(item, action);
         },
     },
     mounted: function () {

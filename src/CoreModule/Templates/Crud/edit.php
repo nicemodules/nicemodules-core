@@ -16,30 +16,29 @@
                                 <v-text-field v-model="item[field.name]" :label="field.label"></v-text-field>
                             </v-col>
                         </template>
-
-
+                        
                         <template v-if="field.type === 'select'">
                             <v-col cols="12" sm="6">
-                                <v-select v-model="item[field.name]" :label="field.label"
+                                <v-select v-model="item[field.name]" 
+                                          :label="field.label"
+                                          item-text="name"
+                                          item-value="value"
                                           :items="field.options"></v-select>
                             </v-col>
                         </template>
-
-
+                        
                         <template v-if="field.type === 'checkbox'">
                             <v-col cols="12" sm="6">
                                 <v-checkbox v-model="item[field.name]" :label="field.label"></v-checkbox>
                             </v-col>
                         </template>
 
-
                         <template v-if="field.type === 'textarea'">
                             <v-col cols="12">
                                 <v-textarea v-model="item[field.name]" :label="field.label"></v-textarea>
                             </v-col>
                         </template>
-
-
+                        
                         <template v-if="field.type === 'date_time' || field.type === 'date'">
                             <v-col cols="12" sm="6">
                                 <v-menu

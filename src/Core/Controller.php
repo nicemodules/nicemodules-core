@@ -20,7 +20,11 @@ abstract class Controller
         $this->lang =  $this->context->getLang();
         $this->timeBefore = array_sum(explode(' ', microtime()));
     }
-
+    
+    public function getRequestParameter($name){
+        return json_decode(Context::instance()->getRequest()->get($name));
+    }
+    
     public function getCurrentExeTime()
     {
         $timeAfter = array_sum(explode(' ', microtime()));
@@ -36,7 +40,7 @@ abstract class Controller
     protected function setResponse(int $status, string $msg = '')
     {
         $this->response['status'] = $status;
-        $this->response['message'][] = $msg;
+        $this->response['messages'][] = $msg;
     }
 
     protected function setResponseStatus(int $status)

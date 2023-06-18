@@ -90,8 +90,12 @@ class CrudTranslation
                 'ok' => $l->get('OK'),
                 'clear' => $l->get('Clear'),
             ],
+            'labels' => [
+                'selected' => $l->get('Selected'),
+            ], 
             'messages'=> [
-                'confirmDelete' => $l->get('Are you sure you want to delete this?')
+                'confirmDelete' => $l->get('Are you sure you want to delete this?'),
+                'unselected' => $l->get('You must tick at least one thing.')
             ]
         ];
     }

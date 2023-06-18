@@ -67,6 +67,7 @@ abstract class CrudController extends Controller
             new Template('Crud/filters'),
             new Template('Crud/item_actions'),
             new Template('Crud/top_button_actions'),
+            new Template('Crud/bulk_actions'),
             new Template(
                 'Crud/app',
                 [
@@ -87,12 +88,14 @@ abstract class CrudController extends Controller
 
     public function getItems()
     {
-        $options = json_decode(Context::instance()->getRequest()->get('options'));
-        $filters = json_decode(Context::instance()->getRequest()->get('filters'));
-
+        $options = $this->getRequestParameter('options');
+        $filters = $this->getRequestParameter('filters');
+        
         $queryBuilder = Manager::instance()->getRepository($this->modelClass)->createQueryBuilder();
 
-        $this->addFilters($filters, $queryBuilder);
+        if($filters){
+            $this->addFilters($filters, $queryBuilder);    
+        }
 
         $queryBuilder->limit($options->itemsPerPage, ($options->page - 1) * $options->itemsPerPage);
         $sort = $this->getSort($options);
@@ -115,7 +118,7 @@ abstract class CrudController extends Controller
     public function edit()
     {
         $crud = $this->getCrud();
-        $item = json_decode(Context::instance()->getRequest()->get('item'));
+        $item = $this->getRequestParameter('subject');
 
         $object = $this->getOrCreateObject($item);
 
@@ -135,7 +138,7 @@ abstract class CrudController extends Controller
 
     public function delete()
     {
-        $item = json_decode(Context::instance()->getRequest()->get('item'));
+        $item = $this->getRequestParameter('subject');
 
         $object = $this->getOrCreateObject($item);
         
@@ -151,7 +154,37 @@ abstract class CrudController extends Controller
         }
     }
     
+    public function bulkDelete(){
+        $items = $this->getRequestParameter('subject');
+        
+        $objects = $this->getSelectedItems($items);
+        
+        foreach ($objects as $object){
+            Manager::instance()->remove($object);
+        }
+        
+        Manager::instance()->flush();
 
+        $this->setResponse(self::SUCCESS, $this->lang->get('The data has been deleted correctly'));
+        $this->renderJsonResponse();
+    }
+
+    /**
+     * @param stdClass[] $items
+     * @return array
+     */
+    public function getSelectedItems(array $items){
+        $ids = [];
+        
+        foreach ($items as $item){
+            $ids[] = $item->ID;
+        }
+        
+        $objects = Manager::instance()->getRepository($this->modelClass)->findIds($ids);
+        
+        return $objects;
+    }
+    
     protected function getOrCreateObject(stdClass $item)
     {
         if ($item->ID) {
@@ -171,7 +204,7 @@ abstract class CrudController extends Controller
      */
     protected function addFilters(stdClass $filters, QueryBuilder $queryBuilder)
     {
-        if ($filters) {
+       
             foreach ($filters as $filter) {
                 if ($filter->value) {
                     switch ($filter->type) {
@@ -204,7 +237,6 @@ abstract class CrudController extends Controller
                     }
                 }
             }
-        }
     }
 
     protected function getSort($options)

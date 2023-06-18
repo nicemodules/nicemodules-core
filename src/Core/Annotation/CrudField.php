@@ -20,6 +20,7 @@ class CrudField
     public string $label;
     public string $name;
     public string $type;
+    public bool $required = false;
     public bool $editable = false;
     public bool $filterable = true;
     public bool $sortable = true;
