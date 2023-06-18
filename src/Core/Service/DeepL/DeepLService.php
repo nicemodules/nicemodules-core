@@ -9,7 +9,7 @@ use NiceModules\Core\Logger;
 
 class DeepLService
 {
-    protected $apiKey = '24c73be6-01b8-d15e-45b4-e6c8d2046bf8:fx';
+    protected $apiKey = '####';
     protected Translator $translator;
 
     /**
