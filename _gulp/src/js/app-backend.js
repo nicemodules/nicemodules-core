@@ -57,28 +57,28 @@ Vue.component('crud-filters', {
 "use strict";
 
 Vue.component('crud-edit', {
-  props: ['translation', 'fields', 'get_item', 'edit', 'locale'],
+  props: ['translation', 'fields', 'action', 'edit', 'locale'],
   template: '#crud-edit',
   data: function data() {
     return {
-      add: false,
       item: {},
       editActive: false
     };
   },
   methods: {
-    save: function save(item) {},
+    save: function save(item) {
+      this.$root.calledAction.subject = item;
+      this.$root.callAction();
+      this.editActive = false;
+    },
     cancel: function cancel() {
       this.editActive = false;
     }
   },
-  mounted: function mounted() {
-    this.add = this.$root.options.allowAdd;
-  },
   watch: {
     edit: {
       handler: function handler() {
-        this.item = this.edit ? Object.assign({}, this.get_item()) : {};
+        this.item = this.edit ? Object.assign({}, this.action().subject) : {};
         if (this.edit) {
           this.editActive = true;
         }
@@ -92,6 +92,38 @@ Vue.component('crud-edit', {
       }
     }
   }
+});
+"use strict";
+
+Vue.component('crud-item-actions', {
+  props: ['item', 'actions'],
+  template: '#crud-item-actions',
+  data: function data() {
+    return {};
+  },
+  methods: {
+    itemAction: function itemAction(item, action) {
+      this.$root.executeAction(item, action);
+    }
+  },
+  mounted: function mounted() {},
+  watch: {}
+});
+"use strict";
+
+Vue.component('crud-top-button-actions', {
+  props: ['item', 'actions'],
+  template: '#crud-top-button-actions',
+  data: function data() {
+    return {};
+  },
+  methods: {
+    buttonAction: function buttonAction(action) {
+      this.$root.executeAction({}, action);
+    }
+  },
+  mounted: function mounted() {},
+  watch: {}
 });
 "use strict";
 
@@ -130,31 +162,61 @@ var NiceModulesCrudApp = {
         filters: crud.filters,
         translation: crud.translation,
         locale: crud.locale,
-        editDialog: false,
         deleteDialog: false,
         edit: false,
-        editedItem: {}
+        confirm: false,
+        calledAction: {},
+        selectedItems: []
       },
       beforeMount: function beforeMount() {},
       mounted: function mounted() {},
       methods: {
-        editItem: function editItem(item) {
-          this.editedItem = item || {};
-          this.edit = !this.edit;
+        executeAction: function executeAction(subject, action) {
+          this.calledAction = action;
+          this.calledAction.subject = subject;
+          if (this.calledAction.confirm) {
+            this.confirm = true;
+            return;
+          }
+
+          // handle predefined actions or call default behaviour 
+          switch (this.calledAction.name) {
+            case 'add':
+            case 'edit':
+              this.edit = !this.edit;
+              break;
+            default:
+              this.callAction();
+              break;
+          }
         },
-        getEditedItem: function getEditedItem() {
-          return this.editedItem;
-        },
-        saveItem: function saveItem(item) {},
-        deleteItem: function deleteItem(item) {
-          //console.log('deleteItem', item)
-          var id = item.id;
-          var idx = this.items.findIndex(function (item) {
-            return item.id === id;
+        callAction: function callAction() {
+          var self = this;
+          self.loading = true;
+          self.confirm = false;
+          jQuery.ajax({
+            url: self.calledAction.uri,
+            data: {
+              item: JSON.stringify(self.calledAction.subject)
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function success(data) {
+              // TODO: add success message
+              self.getItems();
+            },
+            error: function error(jqXHR, exception) {
+              self.handleAjaxError(jqXHR, exception);
+            }
           });
+          self.calledAction = {};
         },
-        deleteConfirm: function deleteConfirm(item) {},
-        closeDelete: function closeDelete() {},
+        getCalledAction: function getCalledAction() {
+          return this.calledAction;
+        },
+        closeConfirm: function closeConfirm() {
+          this.confirm = false;
+        },
         getItems: function getItems() {
           var self = this;
           this.loading = true;

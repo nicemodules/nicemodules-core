@@ -3,65 +3,35 @@
 namespace NiceModules\Core;
 
 use Exception;
+use NiceModules\CoreModule\CoreModule;
 
 use function openssl_decrypt;
 
 class Session extends Singleton
 {
-    protected static string $keySalt;
-    protected static string $fileName = 'session.php';
-    /**
-     * @var string
-     */
-    protected string $key = '';
-    protected string $sessionSalt;
+    private static string $fileName = 'session.php';
+    private string $sessionHash;
 
     /**
      * @throws Exception
      */
     protected function __construct()
     {
+        $sessionFile = CoreModule::instance()->getDataDir() . DIRECTORY_SEPARATOR . self::$fileName;
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        if (file_exists(DATA_DIR . self::$fileName)) {
-            require_once(DATA_DIR . self::$fileName);
-        }
-
-        if (!isset($key) || !isset($keySalt) || !isset($sessionSalt)) {
+        if (!file_exists($sessionFile)) {
             throw new Exception('Core Module has not been installed yet. Please install.');
         }
 
-        $this->key = $key;
-        $this->keySalt = $keySalt;
-        $this->sessionSalt = $sessionSalt;
-    }
+        $this->sessionHash  = file_get_contents($sessionFile);
 
-    /**
-     * Use for install - generate session keys
-     * @param $key
-     */
-    public static function create($key)
-    {
-        self::$keySalt = md5(uniqid('IDKFA', true));
-        $sessionSalt = md5(uniqid('IDDQD', true));
-
-        $codeLines = [
-            '<?php $keySalt = ' . self::$keySalt . ' ; ?>',
-            '<?php $sessionSalt = ' . $sessionSalt . ' ; ?>',
-            '<?php $key = ' . self::getKeyHash($key) . ' ; ?>',
-        ];
-
-        file_put_contents(
-            DATA_DIR . self::$fileName,
-            implode(PHP_EOL, $codeLines)
-        );
-    }
-
-    protected static function getKeyHash($key)
-    {
-        return hash('sha512', $key . self::$keySalt);
+        if (empty($this->sessionHash)) {
+            throw new Exception('Core Module has not been installed yet. Please install.');
+        }
     }
 
     /**
@@ -79,34 +49,13 @@ class Session extends Singleton
         $_SESSION[self::class][$name] = $value;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOpened(): bool
-    {
-        if ($this->get('session_hash') && $this->get('key') === $this->key) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $key
-     */
-    public function open(string $key): void
-    {
-        self::set('session_hash', $this->getSessionHash($key));
-        self::set('key', self::getKeyHash($key));
-    }
-
     public function encrypt($data, $key = null)
     {
         if (!extension_loaded('openssl')) {
             throw new Exception('This app needs the Open SSL PHP extension.');
         }
 
-        return openssl_encrypt($data, "AES-128-ECB", $key ?? $this->get('session_hash'));
+        return openssl_encrypt($data, "AES-128-ECB", $key ?? $this->sessionHash);
     }
 
     public function decrypt($data, $key = null)
@@ -115,11 +64,27 @@ class Session extends Singleton
             throw new Exception('This app needs the Open SSL PHP extension.');
         }
 
-        return openssl_decrypt($data, "AES-128-ECB", $key ?? $this->get('session_hash'));
+        return openssl_decrypt($data, "AES-128-ECB", $key ?? $this->sessionHash);
     }
 
-    protected function getSessionHash($key)
+    /**
+     * Use for install - generate unique for installation session key
+     * @throws Exception
+     */
+    public static function create()
     {
-        return hash('sha512', $key . $this->sessionSalt);
+        $sessionFile = CoreModule::instance()->getDataDir() . DIRECTORY_SEPARATOR . self::$fileName;
+
+        if (file_exists($sessionFile)) {
+            return;
+        }
+
+        $randomBytes = random_bytes(16);
+        $key = bin2hex($randomBytes);
+
+        file_put_contents(
+            $sessionFile,
+            $key
+        );
     }
 }

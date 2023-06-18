@@ -19,6 +19,8 @@ const config = { // The file names are without extensions, but the extensions wi
         app_js: [ // This files will be compiled into app_[env].js and app_[env].min.js file.
             'crud/filters',
             'crud/edit',
+            'crud/item_actions',
+            'crud/top_button_actions',
             'crud/app'
         ],
         concat_js: [ // This files will be concatenated into one js bundle.

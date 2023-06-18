@@ -63,10 +63,12 @@ abstract class CrudController extends Controller
         $crud->addUri('getItems', $this->getAjaxUri('getItems'));
 
         $this->templates = [
-            new Template('Backend/Crud/edit'),
-            new Template('Backend/Crud/filters'),
+            new Template('Crud/edit'),
+            new Template('Crud/filters'),
+            new Template('Crud/item_actions'),
+            new Template('Crud/top_button_actions'),
             new Template(
-                'Backend/Crud/app',
+                'Crud/app',
                 [
                     'crud' => $crud
                 ]
@@ -87,7 +89,7 @@ abstract class CrudController extends Controller
     {
         $options = json_decode(Context::instance()->getRequest()->get('options'));
         $filters = json_decode(Context::instance()->getRequest()->get('filters'));
-        
+
         $queryBuilder = Manager::instance()->getRepository($this->modelClass)->createQueryBuilder();
 
         $this->addFilters($filters, $queryBuilder);
@@ -100,7 +102,7 @@ abstract class CrudController extends Controller
         }
 
         $queryBuilder->buildQuery();
-        
+
         echo json_encode(
             [
                 'items' => $queryBuilder->getResultArray(),
@@ -108,6 +110,57 @@ abstract class CrudController extends Controller
             ]
         );
         exit;
+    }
+
+    public function edit()
+    {
+        $crud = $this->getCrud();
+        $item = json_decode(Context::instance()->getRequest()->get('item'));
+
+        $object = $this->getOrCreateObject($item);
+
+        $crudFields = $crud->getFields();
+
+        foreach ($item as $field => $value) {
+            if (isset($crudFields[$field]) && $crudFields[$field]->editable) {
+                $object->set($field, $value);
+            }
+        }
+
+        Manager::instance()->flush();
+        
+        $this->setResponse(self::SUCCESS,  Context::instance()->getLang()->get('The data has been saved correctly'));
+        $this->renderJsonResponse();
+    }
+
+    public function delete()
+    {
+        $item = json_decode(Context::instance()->getRequest()->get('item'));
+
+        $object = $this->getOrCreateObject($item);
+        
+        if($object && $object->getId()){
+            Manager::instance()->remove($object);
+            Manager::instance()->flush();
+            
+            $this->setResponse(self::SUCCESS, $this->lang->get('The data has been deleted correctly'));
+            $this->renderJsonResponse();
+        }else{
+            $this->setResponse(self::ERROR, $this->lang->get('The data has been deleted correctly'));
+            $this->renderJsonResponse();
+        }
+    }
+    
+
+    protected function getOrCreateObject(stdClass $item)
+    {
+        if ($item->ID) {
+            return Manager::instance()->getRepository($this->modelClass)->find($item->ID);
+        } else {
+            $object = new $this->modelClass();
+            Manager::instance()->persist($object);
+            return $object;
+        }
     }
 
     /**
@@ -140,7 +193,7 @@ abstract class CrudController extends Controller
                         case CrudField::TYPE_TEXT:
                             {
                                 $words = explode(' ', $filter->value);
-                                $queryBuilder->where($filter->name, '%'.implode('%', $words).'%', 'LIKE');
+                                $queryBuilder->where($filter->name, '%' . implode('%', $words) . '%', 'LIKE');
                             }
                             break;
                         default:

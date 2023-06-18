@@ -32,7 +32,7 @@ abstract class FrontendPlugin extends Plugin
 
         $post = new stdClass();
         $post->post_content = parent::getContent();
-        $post->post_title = 'undefined'; // TODO: define  titles in controller
+        $post->post_title = ''; // TODO: define  titles in controller
         $post->post_type = "page";
         $post->comment_status = "closed";
         $posts[] = $post;

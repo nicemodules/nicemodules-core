@@ -1,27 +1,28 @@
 
 ORM LOG ENABLED
 ORM LOG MESSAGES: 2
-2023-06-10 09:07:58 [0s] => DbDeltaSql: CREATE TABLE wp_nm_config (
+2023-06-18 09:43:44 [0s] => DbDeltaSql: CREATE TABLE wp_nm_config (
 ID int(10) NOT NULL auto_increment, 
 date_add datetime NOT NULL, 
 date_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
-namespace varchar(25), 
-name varchar(25), 
+namespace varchar(100), 
+catalogue varchar(100), 
+name varchar(100), 
 label varchar(100), 
 description varchar(150), 
-type varchar(25), 
+type varchar(50), 
 value text, 
 PRIMARY KEY  (ID), 
 INDEX name_idx (name), 
 INDEX namespace_idx (namespace)
 )
 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
-2023-06-10 09:07:59 [0.376s] => DbDeltaSql: CREATE TABLE wp_nm_log (
+2023-06-18 09:43:44 [0.202s] => DbDeltaSql: CREATE TABLE wp_nm_log (
 ID int(10) NOT NULL auto_increment, 
 date_add datetime NOT NULL, 
 date_update timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
 type varchar(20), 
-source varchar(20), 
+source varchar(255), 
 data text, 
 PRIMARY KEY  (ID), 
 INDEX type_idx (type), 

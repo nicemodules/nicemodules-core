@@ -10,7 +10,7 @@ use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
 /**
- * @CrudOptions(title="Log", sortBy={"date_add"}, sortDesc={true}, allowAdd=false)
+ * @CrudOptions(title="Log", sortBy={"date_add"}, sortDesc={true})
  * 
  * @Table(
  *     type="Entity",
@@ -31,7 +31,7 @@ class Log extends Model
      * @Column(type="datetime", null="NOT NULL")
      * @CrudField(label="Added", type="date_time", editable=false)
      */
-    protected ?string $date_add;
+    protected string $date_add;
 
     /**
      * @Column(type="varchar", length="20")

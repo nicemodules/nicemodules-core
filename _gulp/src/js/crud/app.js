@@ -11,12 +11,12 @@ const NiceModulesCrudApp = {
     vuetify: function (crud) {
         const crudApp = this;
         
-        crudApp.vue = new Vue({
+        crudApp.vue = new Vue({ 
             el: '#nm-crud',
             vuetify: new Vuetify({
                 theme: {
                     dark: false
-                },
+                }, 
                 lang: {
                     locales: {lc: crud.translation},
                     current: 'lc',
@@ -32,10 +32,11 @@ const NiceModulesCrudApp = {
                 filters: crud.filters,
                 translation: crud.translation,
                 locale: crud.locale,
-                editDialog: false,
                 deleteDialog: false,
                 edit: false,
-                editedItem: {},
+                confirm: false,
+                calledAction: {},
+                selectedItems: [],
             },
             beforeMount() {
 
@@ -44,26 +45,54 @@ const NiceModulesCrudApp = {
                 
             },
             methods: {
-                editItem(item) {
-                    this.editedItem = item || {};
-                    this.edit = !this.edit;
+                executeAction(subject, action){
+                    this.calledAction = action;
+                    this.calledAction.subject = subject;
+                    
+                    if(this.calledAction.confirm){
+                        this.confirm = true;
+                        return;
+                    }
+                    
+                    // handle predefined actions or call default behaviour 
+                    switch (this.calledAction.name) {
+                        case 'add':
+                        case 'edit':
+                            this.edit = !this.edit;
+                            break;
+                        default:
+                            this.callAction();
+                            break;
+                    }
                 },
-                getEditedItem(){
-                    return this.editedItem;
-                },
-                saveItem(item) {
+                callAction(){
+                    const self = this;
+                    self.loading = true;
+                    self.confirm = false;
+                    
+                    jQuery.ajax({
+                        url: self.calledAction.uri,
+                        data: {
+                            item: JSON.stringify(self.calledAction.subject),
+                        },
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            // TODO: add success message
+                            self.getItems();
+                        },
+                        error: function error(jqXHR, exception) {
+                            self.handleAjaxError(jqXHR, exception);
+                        }
+                    });
 
+                    self.calledAction = {};
                 },
-                deleteItem(item) {
-                    //console.log('deleteItem', item)
-                    let id = item.id
-                    let idx = this.items.findIndex(item => item.id === id)
+                getCalledAction(){
+                    return this.calledAction;
                 },
-                deleteConfirm(item){
-                    
-                },
-                closeDelete(){
-                    
+                closeConfirm(){
+                    this.confirm = false;
                 },
                 getItems() {
                     const self = this;
@@ -95,8 +124,6 @@ const NiceModulesCrudApp = {
                             self.handleAjaxError(jqXHR, exception);
                         }
                     });
-
-                   
                 },
                 handleAjaxError: function (jqXHR, exception) {
                     var msg = '';

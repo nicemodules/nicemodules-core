@@ -21,6 +21,8 @@ if (!defined('ABSPATH')) {
 require_once 'bootstrap.php';
 
 function niceModulesCoreInstall(){
+    NiceModules\Core\Session::create();
+    
     $installer = new NiceModules\Core\Installer();
     $installer->addModel(NiceModules\CoreModule\Model\Config::class);
     $installer->addModel(NiceModules\Core\Model\Log::class);

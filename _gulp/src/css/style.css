@@ -5,7 +5,7 @@
   min-height: 0px; }
 
 .nm-app {
-  padding: 10px; }
+  padding: 25px 0 0 0; }
 
 .nm-border-radius-0, .v-expansion-panels:not(.v-expansion-panels--accordion):not(.v-expansion-panels--tile) > .v-expansion-panel--active.nm-border-radius-0 {
   border-radius: 0; }

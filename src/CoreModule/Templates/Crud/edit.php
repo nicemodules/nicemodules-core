@@ -1,18 +1,7 @@
 <script type="text/x-template" id='crud-edit'>
 
     <v-dialog v-model="editActive" max-width="800px">
-
-        <template v-if="add" v-slot:activator="{ on }">
-            <v-row justify="end">
-                <v-col cols="auto">
-                    <v-btn color="primary" v-on="on">
-                        <v-icon left small>mdi-plus-circle-outline</v-icon>
-                        {{ translation.buttons.add }}
-                    </v-btn>
-                </v-col>
-            </v-row>
-        </template>
-
+        
         <v-card>
             <v-card-title>
                 <span v-if="item.ID">{{ translation.buttons.edit }}</span>

@@ -34,6 +34,8 @@ if (is_admin()) {
     if (WP_DEBUG) {
         $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
             ->addRoute(new Route('nm_config_data', ConfigController::class, 'getItems', true))
+            ->addRoute(new Route('nm_config_edit', ConfigController::class, 'edit', true))
+            ->addRoute(new Route('nm_config_delete', ConfigController::class, 'delete', true))
             ;
     }
     
