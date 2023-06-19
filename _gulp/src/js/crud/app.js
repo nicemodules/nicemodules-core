@@ -32,7 +32,6 @@ const NiceModulesCrudApp = {
                 filters: crud.filters,
                 hasFilters: false,
                 translation: crud.translation,
-                locale: crud.locale,
                 deleteDialog: false,
                 edit: false,
                 confirm: false,

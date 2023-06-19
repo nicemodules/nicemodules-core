@@ -132,7 +132,7 @@ abstract class CrudController extends Controller
 
         Manager::instance()->flush();
         
-        $this->setResponse(self::SUCCESS,  Context::instance()->getLang()->get('The data has been saved correctly'));
+        $this->setResponse(self::SUCCESS,  Context::instance()->getInterfaceTranslator()->get('The data has been saved correctly'));
         $this->renderJsonResponse();
     }
 
@@ -146,10 +146,10 @@ abstract class CrudController extends Controller
             Manager::instance()->remove($object);
             Manager::instance()->flush();
             
-            $this->setResponse(self::SUCCESS, $this->lang->get('The data has been deleted correctly'));
+            $this->setResponse(self::SUCCESS, $this->interfaceI18n->get('The data has been deleted correctly'));
             $this->renderJsonResponse();
         }else{
-            $this->setResponse(self::ERROR, $this->lang->get('The data has been deleted correctly'));
+            $this->setResponse(self::ERROR, $this->interfaceI18n->get('The data has been deleted correctly'));
             $this->renderJsonResponse();
         }
     }
@@ -165,7 +165,7 @@ abstract class CrudController extends Controller
         
         Manager::instance()->flush();
 
-        $this->setResponse(self::SUCCESS, $this->lang->get('The data has been deleted correctly'));
+        $this->setResponse(self::SUCCESS, $this->interfaceI18n->get('The data has been deleted correctly'));
         $this->renderJsonResponse();
     }
 

@@ -27,8 +27,7 @@ class Crud
     public array $translation;
 
     public array $uris;
-
-    public string $locale;
+    
 
     protected string $class;
 
@@ -38,7 +37,6 @@ class Crud
         $this->class = $modelClassName;
         $translationInstance = new CrudTranslation();
         $this->translation = $translationInstance->get();
-        $this->locale = str_replace('_', '-', Context::instance()->getLang()->getLocale());
     }
 
     /**

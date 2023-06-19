@@ -2,6 +2,8 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\Core\I18n\InterfaceI18n;
+
 abstract class Controller
 {
     const ERROR = 0;
@@ -12,12 +14,12 @@ abstract class Controller
     protected $timeBefore;
 
     protected Context $context;
-    protected Lang $lang;
+    protected InterfaceI18n $interfaceI18n;
 
     public function __construct()
     {
         $this->context = Context::instance();
-        $this->lang =  $this->context->getLang();
+        $this->interfaceI18n =  $this->context->getInterfaceTranslator();
         $this->timeBefore = array_sum(explode(' ', microtime()));
     }
     

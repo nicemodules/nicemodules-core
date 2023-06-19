@@ -8,7 +8,7 @@ use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Context;
 use NiceModules\Core\Controller\CrudController;
 use NiceModules\Core\Crud;
-use NiceModules\Core\Lang;
+use NiceModules\Core\I18n\InterfaceI18n;
 use ReflectionClass;
 use ReflectionException;
 
@@ -20,12 +20,12 @@ class CrudBuilder
     protected AnnotationReader $reader;
     protected ReflectionClass $reflector;
     protected CrudController $controller;
-    protected Lang $lang;
+    protected InterfaceI18n $interfaceI18n;
 
 
     public function __construct(CrudController $controller)
     {
-        $this->lang = Context::instance()->getLang();
+        $this->interfaceI18n = Context::instance()->getInterfaceTranslator();
         $this->class = $controller->getModelClass();
         $this->controller = $controller;
     }
@@ -55,16 +55,16 @@ class CrudBuilder
         $options = $this->getReader()->getClassAnnotation($reflector, CrudOptions::class);
 
         // Set crud options
-        $options->title = $this->lang->get($options->title);
+        $options->title = $this->interfaceI18n->get($options->title);
 
         $this->processItemActions($options->itemActions);
         $this->processTopButtonActions($options->topButtonActions);
         $this->processBulkActions($options->bulkActions);
-        
+
         $fields = [];
         $filters = [];
         $headers = [];
-        
+
         foreach ($reflector->getProperties() as $property) {
             // Get the annotations of this property.
             $field = $this->getPropertyAnnotations($reflector, $property->name);
@@ -72,7 +72,7 @@ class CrudBuilder
             // Silently ignore properties that do not have the annotation
             if ($field && isset($field->type)) {
                 // Translate label
-                $field->label = $this->lang->get($field->label);
+                $field->label = $this->interfaceI18n->get($field->label);
 
                 $field->name = $property->name;
 
@@ -88,14 +88,14 @@ class CrudBuilder
                 $headers[] = new CrudHeader($field->label, $property->name, $field->type, $field->sortable);
             }
         }
-        
-        
-        if($fields){
+
+
+        if ($fields) {
             $headers[] = new CrudHeader('', 'actions', 'actions', false);
         }
 
-        if($options->bulkActions){
-            $options->bulk = true; 
+        if ($options->bulkActions) {
+            $options->bulk = true;
         }
 
         $this->crud->setOptions($options);
@@ -110,8 +110,8 @@ class CrudBuilder
             $itemAction->uri = $this->controller->getAjaxUri($itemAction->name);
 
             if (isset($itemAction->confirm) && $itemAction->confirm) {
-                $itemAction->confirm = $this->lang->get($itemAction->confirm);
-                $itemAction->label = $this->lang->get($itemAction->label);
+                $itemAction->confirm = $this->interfaceI18n->get($itemAction->confirm);
+                $itemAction->label = $this->interfaceI18n->get($itemAction->label);
             }
         }
     }
@@ -122,8 +122,8 @@ class CrudBuilder
             $topButtonAction->uri = $this->controller->getAjaxUri($topButtonAction->name);
 
             if (isset($topButtonAction->confirm) && $topButtonAction->confirm) {
-                $topButtonAction->confirm = $this->lang->get($topButtonAction->confirm);
-                $topButtonAction->label = $this->lang->get($topButtonAction->label);
+                $topButtonAction->confirm = $this->interfaceI18n->get($topButtonAction->confirm);
+                $topButtonAction->label = $this->interfaceI18n->get($topButtonAction->label);
             }
         }
     }
@@ -134,8 +134,8 @@ class CrudBuilder
             $bulkAction->uri = $this->controller->getAjaxUri($bulkAction->name);
 
             if (isset($bulkAction->confirm) && $bulkAction->confirm) {
-                $bulkAction->confirm = $this->lang->get($bulkAction->confirm);
-                $bulkAction->label = $this->lang->get($bulkAction->label);
+                $bulkAction->confirm = $this->interfaceI18n->get($bulkAction->confirm);
+                $bulkAction->label = $this->interfaceI18n->get($bulkAction->label);
             }
         }
     }

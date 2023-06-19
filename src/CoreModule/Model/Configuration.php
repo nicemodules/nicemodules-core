@@ -41,7 +41,7 @@ use NiceModules\ORM\Annotations\Table;
  *     inherits="NiceModules\Core\Model"
  *     )
  */
-class Config extends Model
+class Configuration extends Model
 {
     /**
      * @Column(type = "varchar", length = 100)

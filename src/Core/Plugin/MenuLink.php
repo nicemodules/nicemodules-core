@@ -26,7 +26,7 @@ class MenuLink
         ?MenuLink $parent = null,
         string $capability = 'edit_posts'
     ) {
-        $l =  Context::instance()->getLang();
+        $l =  Context::instance()->getInterfaceTranslator();
         
         $this->pageTitle = $l->get($pageTitle);
         $this->menuTitle =  $l->get($menuTitle);

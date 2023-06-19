@@ -8,7 +8,7 @@ class CrudTranslation
 {
     public function get()
     {
-        $l = Context::instance()->getLang();
+        $l = Context::instance()->getInterfaceTranslator();
 
         return [
             'badge' => $l->get('Badge'),

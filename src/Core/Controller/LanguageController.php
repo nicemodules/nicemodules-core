@@ -6,7 +6,7 @@ namespace NiceModules\Core\Controller;
 use NiceModules\Core\Context;
 use NiceModules\Core\Crud;
 use NiceModules\Core\Helper\VuetifyHelper;
-use NiceModules\Core\Lang;
+use NiceModules\Core\InterfaceTranslator;
 use NiceModules\Core\Lang\Locales;
 use NiceModules\Core\Model\Language;
 use NiceModules\ORM\Manager;
@@ -44,7 +44,7 @@ class LanguageController extends CrudController
         
         Manager::instance()->flush();
 
-        $this->setResponse(self::SUCCESS,  Context::instance()->getLang()->get('The data has been saved correctly'));
+        $this->setResponse(self::SUCCESS,  Context::instance()->getInterfaceTranslator()->get('The data has been saved correctly'));
         $this->renderJsonResponse();
     }
 }

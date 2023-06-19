@@ -2,12 +2,15 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\Core\Lang\Locales;
+use NiceModules\Core\I18n\InterfaceI18n;
+
 class Context extends Singleton
 {
     protected Request $request;
     protected Controller $controller;
     protected Plugin $activePlugin;
-    protected Lang $lang;
+    protected InterfaceI18n $interfaceI18n;
 
     protected function __construct()
     {
@@ -54,16 +57,17 @@ class Context extends Singleton
     }
 
     /**
-     * @return Lang
+     * @return InterfaceI18n
      */
-    public function getLang(): Lang
+    public function getInterfaceTranslator(): InterfaceI18n
     {
-        if(!isset($this->lang)){
+        if(!isset($this->interfaceI18n)){
+            $locales = new Locales(); 
             $locale = get_user_locale();
-            $this->lang = new Lang($locale);
-            $this->lang->setDir($this->getActivePlugin()->getModule()->getLangDir());
+            $this->interfaceI18n = new InterfaceI18n($locales->getLocaleLang($locale));
+            $this->interfaceI18n->setDir($this->getActivePlugin()->getModule()->getLangDir());
         }
         
-        return $this->lang;
+        return $this->interfaceI18n;
     }
 }
