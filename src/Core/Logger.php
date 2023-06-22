@@ -2,7 +2,7 @@
 
 namespace NiceModules\Core;
 
-use NiceModules\Core\Model\Log;
+use NiceModules\CoreModule\Model\Log;
 use NiceModules\ORM\Manager;
 
 class Logger

@@ -34,7 +34,7 @@ abstract class Controller
         return round($time, 3) . 's';
     }
     
-    public function getContext(): mixed
+    public function getContext(): Context
     {
         return $this->context;
     }

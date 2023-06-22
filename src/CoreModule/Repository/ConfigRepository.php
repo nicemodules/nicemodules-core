@@ -4,7 +4,7 @@ namespace NiceModules\CoreModule\Repository;
 
 use NiceModules\ORM\Repositories\BaseRepository;
 
-class ConfigRepository extends BaseRepository
+class ConfigurationRepository extends BaseRepository
 {
 
 }

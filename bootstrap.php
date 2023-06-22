@@ -2,12 +2,14 @@
 
 namespace NiceModules;
 
-use NiceModules\Core\Controller\LanguageController;
-use NiceModules\Core\Controller\LogController;
+
+
 use NiceModules\Core\Plugin\MenuLink;
 use NiceModules\Core\Plugin\Resource;
 use NiceModules\Core\Router\Route;
 use NiceModules\CoreModule\Backend\Controller\ConfigController;
+use NiceModules\CoreModule\Backend\Controller\LanguageController;
+use NiceModules\CoreModule\Backend\Controller\LogController;
 use NiceModules\CoreModule\Backend\CoreBackendPlugin;
 use NiceModules\CoreModule\CoreModule;
 use NiceModules\CoreModule\Frontend\Controller\TestingController;
@@ -21,7 +23,6 @@ require_once 'vendor/autoload.php';
 
 if (is_admin()) {
     $coreAdminPlugin = new CoreBackendPlugin(CoreModule::instance());
-
     
     $router = $coreAdminPlugin->getRouter();
 

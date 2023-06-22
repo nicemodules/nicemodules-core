@@ -25,9 +25,9 @@ abstract class Model extends BaseModel
      */
     protected string $date_update;
 
-    public function executeBeforeSave()
+    public function beforeSave()
     {
-        parent::executeBeforeSave();
+        parent::beforeSave();
 
         if (!$this->hasId()) { // is object new?
             $this->date_add = date('Y-m-d H:i:s');

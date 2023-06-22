@@ -226,6 +226,10 @@ abstract class CrudController extends Controller
                         case CrudField::TYPE_TEXT:
                             {
                                 $words = explode(' ', $filter->value);
+                                
+                                if($this->getContext()){
+                                    
+                                }
                                 $queryBuilder->where($filter->name, '%' . implode('%', $words) . '%', 'LIKE');
                             }
                             break;

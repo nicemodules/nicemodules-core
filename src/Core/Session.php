@@ -39,12 +39,12 @@ class Session extends Singleton
      * @param mixed|null $default
      * @return mixed
      */
-    public function get(string $name, mixed $default = null): mixed
+    public function get(string $name, $default = null)
     {
         return $_SESSION[self::class][$name] ?? $default;
     }
 
-    public function set(string $name, mixed $value)
+    public function set(string $name, $value)
     {
         $_SESSION[self::class][$name] = $value;
     }

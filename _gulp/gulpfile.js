@@ -13,6 +13,7 @@ const config = { // The file names are without extensions, but the extensions wi
         concat_css: [ // This files will be concatenated into one css bundle.
             'reset',
             'materialdesignicons',
+            'flag-icons',
             'vuetify',
             'style',
         ],

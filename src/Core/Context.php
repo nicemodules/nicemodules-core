@@ -2,6 +2,7 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\Core\I18n\OrmI18n;
 use NiceModules\Core\Lang\Locales;
 use NiceModules\Core\I18n\InterfaceI18n;
 
@@ -11,6 +12,7 @@ class Context extends Singleton
     protected Controller $controller;
     protected Plugin $activePlugin;
     protected InterfaceI18n $interfaceI18n;
+    protected OrmI18n $ormI18n;
 
     protected function __construct()
     {
@@ -69,5 +71,17 @@ class Context extends Singleton
         }
         
         return $this->interfaceI18n;
+    }
+
+    /**
+     * @return OrmI18n
+     */
+    public function getOrmI18n(): OrmI18n
+    {
+        if(!isset($this->ormI18n)){
+            $this->ormI18n = new OrmI18n(Session::instance()->get('orm_language'));
+        }
+        
+        return $this->ormI18n;
     }
 }

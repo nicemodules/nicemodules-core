@@ -25,7 +25,7 @@ use NiceModules\ORM\Annotations\Table;
  *      @CrudTopButtonAction(name="edit", label="Add", icon="mdi-plus-circle-outline")
  *      },
  *     bulkActions={
- *      @CrudBulkAction(name="bulkDelete", label="Dlete", icon="mdi-delete", color="red lighten-4", confirm="Are you sure you want to delete this?")
+ *      @CrudBulkAction(name="bulkDelete", label="Delete", icon="mdi-delete", color="red lighten-4", confirm="Are you sure you want to delete this?")
  *      }
  *     )
  *
@@ -37,8 +37,9 @@ use NiceModules\ORM\Annotations\Table;
  *      @Index(name="name_idx", columns={"name"}),
  *      @Index(name="namespace_idx", columns={"namespace"})
  *      },
- *     repository="NiceModules\CoreModule\Repository\ConfigRepository",
- *     inherits="NiceModules\Core\Model"
+ *     repository="NiceModules\CoreModule\Repository\ConfigurationRepository",
+ *     inherits="NiceModules\Core\Model",
+ *     custom={i18n=true}
  *     )
  */
 class Configuration extends Model
@@ -50,7 +51,7 @@ class Configuration extends Model
     protected ?string $namespace;
 
     /**
-     * @Column(type="varchar", length=100)
+     * @Column(type="varchar", length=100, custom={i18n=true})
      * @CrudField(label="Catalogue", type="text", editable=true)
      */
     protected ?string $catalogue;
@@ -62,13 +63,13 @@ class Configuration extends Model
     protected ?string $name;
 
     /**
-     * @Column(type="varchar", length=100)
+     * @Column(type="varchar", length=100, custom={i18n=true})
      * @CrudField(label="Label", type="text", editable=true)
      */
     protected ?string $label;
 
     /**
-     * @Column(type="varchar", length=150)
+     * @Column(type="varchar", length=150, custom={i18n=true})
      * @CrudField(label="Description", type="text", editable=true)
      */
     protected ?string $description;

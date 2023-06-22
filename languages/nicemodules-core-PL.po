@@ -1,0 +1,215 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: PL\n"
+
+msgid "Config"
+msgstr "Konfiguracja"
+
+msgid "NiceModules"
+msgstr "NiceModules"
+
+msgid "Log"
+msgstr "Dziennik"
+
+msgid "Languages"
+msgstr "Języki"
+
+msgid "Badge"
+msgstr "Odznaka"
+
+msgid "Close"
+msgstr "Zamknij"
+
+msgid "No matching records found"
+msgstr "Nie znaleziono pasujących rekordów"
+
+msgid "Loading items..."
+msgstr "Ładowanie elementów..."
+
+msgid "Rows per page:"
+msgstr "Wiersze na stronę:"
+
+msgid "Sorted descending."
+msgstr "Posortowane malejąco."
+
+msgid "Sorted ascending."
+msgstr "Posortowane rosnąco."
+
+msgid "Not sorted."
+msgstr "Nie posortowane."
+
+msgid "Activate to remove sorting."
+msgstr "Aktywuj, aby usunąć sortowanie."
+
+msgid "Activate to sort descending."
+msgstr "Aktywuj, aby sortować malejąco."
+
+msgid "Activate to sort ascending."
+msgstr "Aktywuj, aby sortować rosnąco."
+
+msgid "Sort by"
+msgstr "Sortuj według"
+
+msgid "Items per page:"
+msgstr "Elementy na stronę:"
+
+msgid "All"
+msgstr "Wszystkie"
+
+msgid "Next page"
+msgstr "Następna strona"
+
+msgid "Previous page"
+msgstr "Poprzednia strona"
+
+msgid "First page"
+msgstr "Pierwsza strona"
+
+msgid "Last page"
+msgstr "Ostatnia strona"
+
+msgid "{0}-{1} of {2}"
+msgstr "{0}-{1} z {2}"
+
+msgid "{0} selected"
+msgstr "{0} wybrany"
+
+msgid "Next month"
+msgstr "Następny miesiąc"
+
+msgid "Next year"
+msgstr "Następny rok"
+
+msgid "Previous month"
+msgstr "Poprzedni miesiąc"
+
+msgid "Previous year"
+msgstr "Poprzedni rok"
+
+msgid "from"
+msgstr "z"
+
+msgid "to"
+msgstr "do"
+
+msgid "No data available"
+msgstr "Brak dostępnych danych"
+
+msgid "Previous visual"
+msgstr "Poprzednia wizualizacja"
+
+msgid "Next visual"
+msgstr "Następna wizualizacja"
+
+msgid "Carousel slide {0} of {1}"
+msgstr "Slajd karuzeli {0} z {1}"
+
+msgid "{0} more"
+msgstr "{0} więcej"
+
+msgid "{0} files"
+msgstr "{0} plików"
+
+msgid "{0} files ({1} in total)"
+msgstr "{0} plików (łącznie {1})"
+
+msgid "AM"
+msgstr "AM"
+
+msgid "PM"
+msgstr "PM"
+
+msgid "Pagination Navigation"
+msgstr "Nawigacja stronicowania"
+
+msgid "Goto Page {0}"
+msgstr "Przejdź do strony {0}"
+
+msgid "Current Page, Page {0}"
+msgstr "Bieżąca strona, strona {0}"
+
+msgid "Rating {0} of {1}"
+msgstr "Ocena {0} z {1}"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Save"
+msgstr "Zapisz"
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "Edit"
+msgstr "Edytuj"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Clear"
+msgstr "Wyczyść"
+
+msgid "Selected"
+msgstr "Wybrane"
+
+msgid "Are you sure you want to delete this?"
+msgstr "Czy na pewno chcesz to usunąć?"
+
+msgid "You must tick at least one thing."
+msgstr "Musisz zaznaczyć przynajmniej jedną rzecz."
+
+msgid "Configuration"
+msgstr "Konfiguracja"
+
+msgid "Dlete"
+msgstr "Dlete"
+
+msgid "Namespace"
+msgstr "Przestrzeń nazw"
+
+msgid "Catalogue"
+msgstr "Katalog"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Label"
+msgstr "Etykieta"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Value"
+msgstr "Wartość"
+
+msgid "Added"
+msgstr "Dodano"
+
+msgid "Source"
+msgstr "Źródło"
+
+msgid "Data"
+msgstr "Dane"
+
+msgid "Language"
+msgstr "Język"
+
+msgid "Shortcut"
+msgstr "Skrót"
+
+msgid "Active"
+msgstr "Aktywny"
+
+msgid ""
+msgstr ""

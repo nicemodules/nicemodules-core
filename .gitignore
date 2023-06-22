@@ -4,6 +4,7 @@
 !/data/static
 !/data/.htaccess
 !/languages
+!/flags
 !/src
 !/tests
 !/templates

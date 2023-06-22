@@ -4,8 +4,10 @@ namespace NiceModules\Core\Plugin;
 
 
 use NiceModules\Core\Helper\WpHelper;
+use NiceModules\Core\Lang\Locales;
 use NiceModules\Core\Plugin;
 use NiceModules\Core\Router\FrontendRouter;
+use NiceModules\Core\Session;
 use stdClass;
 
 abstract class FrontendPlugin extends Plugin
@@ -13,6 +15,13 @@ abstract class FrontendPlugin extends Plugin
     protected function initializeRouter()
     {
         $this->router = new FrontendRouter();
+    }
+
+    protected function initializeSession()
+    {
+        $locales = new Locales();
+        $locale = get_user_locale();
+        Session::instance()->set('orm_language', $locales->getLocaleLang($locale));
     }
 
     public function initialize()

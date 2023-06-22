@@ -13,12 +13,14 @@ abstract class Plugin
 
     public function __construct(Module $module)
     {
+        $this->initializeSession();
         $this->initializeRouter();
         $this->module = $module;
         Context::instance()->setActivePlugin($this);
     }
 
     abstract public function initialize();
+    abstract protected function initializeSession();
 
     /**
      * @return string|null
