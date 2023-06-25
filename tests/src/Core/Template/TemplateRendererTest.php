@@ -8,20 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class TemplateRendererTest extends TestCase
 {
-
-    public function test__construct()
-    {
-        $renderer = new TemplateRenderer();
-    }
-
-    /**
-     * @doesNotPerformAssertions
-     */
-    public function testRender()
-    {
-        // tested in testGetContent
-    }
-
+    
 
     public function testGetContent()
     {

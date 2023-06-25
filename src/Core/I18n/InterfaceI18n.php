@@ -94,6 +94,10 @@ class InterfaceI18n extends I18n
      */
     public function translate(string $text): string
     {
+        if($text === ''){
+            return $text;
+        }
+        
         if($this->service){
             try {
                 return $this->service->get($text, self::DEFAULT_LANGUAGE, $this->language);

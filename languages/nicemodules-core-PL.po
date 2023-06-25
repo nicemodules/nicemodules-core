@@ -211,5 +211,20 @@ msgstr "Skrót"
 msgid "Active"
 msgstr "Aktywny"
 
+msgid "The data has been saved correctly"
+msgstr "Dane zostały zapisane prawidłowo"
+
+msgid "Are you sure you want to clear all log?"
+msgstr "Czy na pewno chcesz wyczyścić cały dziennik?"
+
+msgid "Clear log"
+msgstr "Wyczyść dziennik"
+
+msgid "The data has been deleted correctly"
+msgstr "Dane zostały poprawnie usunięte"
+
+msgid "Configuration values"
+msgstr "Wartości konfiguracji"
+
 msgid ""
 msgstr ""

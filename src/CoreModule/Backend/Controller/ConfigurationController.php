@@ -7,7 +7,7 @@ use NiceModules\Core\Controller\CrudController;
 use NiceModules\CoreModule\Model\Configuration;
 
 
-class ConfigController extends CrudController
+class ConfigurationController extends CrudController
 {
     protected string $modelClass = Configuration::class;
 }

@@ -39,8 +39,6 @@ class Locales
             'DE' => 'German',
             'EL' => 'Greek',
             'EN' => 'English',
-            'EN-GB' => 'English (British)',
-            'EN-US' => 'English (American)',
             'ES' => 'Spanish',
             'ET' => 'Estonian',
             'FI' => 'Finnish',

@@ -21,6 +21,7 @@ abstract class FrontendPlugin extends Plugin
     {
         $locales = new Locales();
         $locale = get_user_locale();
+        echo '<pre>'.print_r('EXE___', 1).'</pre>';
         Session::instance()->set('orm_language', $locales->getLocaleLang($locale));
     }
 

@@ -2,6 +2,7 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\CoreModule\Model\Cfg;
 use NiceModules\CoreModule\Model\Configuration;
 use NiceModules\ORM\Manager;
 
@@ -19,12 +20,12 @@ class Config
         $this->namespace = $namespace;
 
         $config = Manager::instance()
-            ->getRepository(Configuration::class)
+            ->getRepository(Cfg::class)
             ->createQueryBuilder()
             ->where('namespace', $namespace)
             ->buildQuery()
             ->getResult();
-
+        
         foreach ($config as $item) {
             $this->config[$item->get('name')] = $item;
         }

@@ -3,7 +3,7 @@
 namespace NiceModules\Testes\Core;
 
 use NiceModules\Core\Logger;
-use NiceModules\Core\Model\Log;
+use NiceModules\CoreModule\Model\Log;
 use NiceModules\ORM\Manager;
 use PHPUnit\Framework\TestCase;
 

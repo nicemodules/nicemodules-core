@@ -19,7 +19,7 @@ abstract class Controller
     public function __construct()
     {
         $this->context = Context::instance();
-        $this->interfaceI18n =  $this->context->getInterfaceTranslator();
+        $this->interfaceI18n =  $this->context->getInterfaceI18n();
         $this->timeBefore = array_sum(explode(' ', microtime()));
     }
     

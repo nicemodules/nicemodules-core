@@ -11,12 +11,15 @@ class Session extends Singleton
 {
     private static string $fileName = 'session.php';
     private string $sessionHash;
+    protected ?string $namespace;
 
     /**
      * @throws Exception
      */
     protected function __construct()
     {
+        $this->namespace = Context::instance()->getActivePlugin()->getClassName();
+        
         $sessionFile = CoreModule::instance()->getDataDir() . DIRECTORY_SEPARATOR . self::$fileName;
 
         if (session_status() === PHP_SESSION_NONE) {
@@ -39,14 +42,22 @@ class Session extends Singleton
      * @param mixed|null $default
      * @return mixed
      */
-    public function get(string $name, $default = null)
+    public function get(string $name, $default = null, $namespace = null)
     {
-        return $_SESSION[self::class][$name] ?? $default;
+        if($namespace === null){
+            $namespace = $this->namespace;
+        }
+        
+        return $_SESSION[$namespace][$name] ?? $default;
     }
 
-    public function set(string $name, $value)
+    public function set(string $name, $value, $namespace = null)
     {
-        $_SESSION[self::class][$name] = $value;
+        if($namespace === null){
+            $namespace = $this->namespace;
+        }
+        
+        $_SESSION[$namespace][$name] = $value;
     }
 
     public function encrypt($data, $key = null)

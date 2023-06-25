@@ -7,15 +7,14 @@ use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudItemAction;
 use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Annotation\CrudTopButtonAction;
-use NiceModules\Core\Model;
+use NiceModules\Core\Model\i18nModel;
 use NiceModules\ORM\Annotations\Column;
 use NiceModules\ORM\Annotations\Index;
 use NiceModules\ORM\Annotations\Table;
 
-
 /**
  * @CrudOptions(
- *     title="Configuration",
+ *     title="Configuration values",
  *     sortBy={"ID"},
  *     itemActions={
  *      @CrudItemAction(name="edit", color="primary", icon="mdi-pencil"),
@@ -38,11 +37,11 @@ use NiceModules\ORM\Annotations\Table;
  *      @Index(name="namespace_idx", columns={"namespace"})
  *      },
  *     repository="NiceModules\CoreModule\Repository\ConfigurationRepository",
- *     inherits="NiceModules\Core\Model",
- *     custom={i18n=true}
+ *     inherits="NiceModules\Core\Model\I18nModel",
+ *     custom={"i18n":true, "i18nModel":"NiceModules\CoreModule\Model\ConfigurationI18n"}
  *     )
  */
-class Configuration extends Model
+class Configuration extends i18nModel
 {
     /**
      * @Column(type = "varchar", length = 100)
@@ -51,7 +50,7 @@ class Configuration extends Model
     protected ?string $namespace;
 
     /**
-     * @Column(type="varchar", length=100, custom={i18n=true})
+     * @Column(type="varchar", length=100, custom={"i18n":true})
      * @CrudField(label="Catalogue", type="text", editable=true)
      */
     protected ?string $catalogue;
@@ -63,13 +62,13 @@ class Configuration extends Model
     protected ?string $name;
 
     /**
-     * @Column(type="varchar", length=100, custom={i18n=true})
+     * @Column(type="varchar", length=100, custom={"i18n":true})
      * @CrudField(label="Label", type="text", editable=true)
      */
     protected ?string $label;
 
     /**
-     * @Column(type="varchar", length=150, custom={i18n=true})
+     * @Column(type="varchar", length=150, custom={"i18n":true})
      * @CrudField(label="Description", type="text", editable=true)
      */
     protected ?string $description;

@@ -25,7 +25,7 @@ class CrudBuilder
 
     public function __construct(CrudController $controller)
     {
-        $this->interfaceI18n = Context::instance()->getInterfaceTranslator();
+        $this->interfaceI18n = Context::instance()->getInterfaceI18n();
         $this->class = $controller->getModelClass();
         $this->controller = $controller;
     }

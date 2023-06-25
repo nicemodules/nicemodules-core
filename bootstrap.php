@@ -4,10 +4,11 @@ namespace NiceModules;
 
 
 
+use NiceModules\Core\Bootstrap;
 use NiceModules\Core\Plugin\MenuLink;
 use NiceModules\Core\Plugin\Resource;
 use NiceModules\Core\Router\Route;
-use NiceModules\CoreModule\Backend\Controller\ConfigController;
+use NiceModules\CoreModule\Backend\Controller\ConfigurationController;
 use NiceModules\CoreModule\Backend\Controller\LanguageController;
 use NiceModules\CoreModule\Backend\Controller\LogController;
 use NiceModules\CoreModule\Backend\CoreBackendPlugin;
@@ -21,6 +22,9 @@ if (!defined('ABSPATH')) {
 
 require_once 'vendor/autoload.php';
 
+$bootstrap = new Bootstrap();
+$bootstrap->initialize();
+
 if (is_admin()) {
     $coreAdminPlugin = new CoreBackendPlugin(CoreModule::instance());
     
@@ -28,22 +32,22 @@ if (is_admin()) {
 
     // Define rotes
     $router
-        ->addRoute(new Route('nm_log', LogController::class, 'list'))
-        ->addRoute(new Route('nm_log_data', LogController::class, 'getItems', true))
-        ->addRoute(new Route('nm_index', LogController::class, 'list'))
         ->addRoute(new Route('nm_language', LanguageController::class, 'list'))
         ->addRoute(new Route('nm_language_data', LanguageController::class, 'getItems', true))
         ->addRoute(new Route('nm_language_edit', LanguageController::class, 'edit', true))
         ->addRoute(new Route('nm_language_delete', LanguageController::class, 'delete', true))
-   
     ;
 
     if (WP_DEBUG) {
-        $router->addRoute(new Route('nm_config', ConfigController::class, 'list'))
-            ->addRoute(new Route('nm_config_data', ConfigController::class, 'getItems', true))
-            ->addRoute(new Route('nm_config_edit', ConfigController::class, 'edit', true))
-            ->addRoute(new Route('nm_config_delete', ConfigController::class, 'delete', true))
-            ->addRoute(new Route('nm_config_bulk_delete', ConfigController::class, 'bulkDelete', true))
+        $router->addRoute(new Route('nm_config', ConfigurationController::class, 'list'))
+            ->addRoute(new Route('nm_log', LogController::class, 'list'))
+            ->addRoute(new Route('nm_log_data', LogController::class, 'getItems', true))
+            ->addRoute(new Route('nm_log_clear', LogController::class, 'clearLog', true))
+            ->addRoute(new Route('nm_index', LogController::class, 'list'))
+            ->addRoute(new Route('nm_config_data', ConfigurationController::class, 'getItems', true))
+            ->addRoute(new Route('nm_config_edit', ConfigurationController::class, 'edit', true))
+            ->addRoute(new Route('nm_config_delete', ConfigurationController::class, 'delete', true))
+            ->addRoute(new Route('nm_config_bulk_delete', ConfigurationController::class, 'bulkDelete', true))
             ;
     }
     

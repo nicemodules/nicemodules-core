@@ -4,7 +4,7 @@ namespace NiceModules\Tests\Core\Crud;
 
 use NiceModules\Core\Crud;
 use NiceModules\Core\Crud\CrudBuilder;
-use NiceModules\CoreModule\Backend\Controller\ConfigController;
+use NiceModules\CoreModule\Backend\Controller\ConfigurationController;
 use NiceModules\CoreModule\Model\Configuration;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class CrudBuilderTest extends TestCase
 
     public function testBuild()
     {
-        $controller = new ConfigController();
+        $controller = new ConfigurationController();
         $builder = new CrudBuilder($controller);
         $crud = $builder->build()->getCrud();
         

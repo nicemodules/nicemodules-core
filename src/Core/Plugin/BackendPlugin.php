@@ -1,11 +1,9 @@
 <?php
-
-
 namespace NiceModules\Core\Plugin;
 
 
 use NiceModules;
-use NiceModules\Core\Config;
+use NiceModules\Core\Context;
 use NiceModules\Core\Installer;
 use NiceModules\Core\Module;
 use NiceModules\Core\Plugin;
@@ -20,16 +18,15 @@ abstract class BackendPlugin extends Plugin
     public function __construct(Module $module)
     {
         parent::__construct($module);
-        
+
         $this->installer = new Installer();
     }
     
     protected function initializeSession()
     {
-        if(Session::instance()->get('orm_language')){
-            Session::instance()->set('orm_language', Config::instance('core')->get('orm_language'));
+        if(!Session::instance()->get('orm_language')){
+            Session::instance()->set('orm_language', Context::instance()->getInterfaceI18n()->getLanguage());
         }
-        
     }
 
     public function getInstaller(): Installer

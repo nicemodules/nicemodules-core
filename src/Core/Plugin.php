@@ -13,10 +13,10 @@ abstract class Plugin
 
     public function __construct(Module $module)
     {
-        $this->initializeSession();
-        $this->initializeRouter();
         $this->module = $module;
         Context::instance()->setActivePlugin($this);
+        $this->initializeSession();
+        $this->initializeRouter();
     }
 
     abstract public function initialize();
@@ -94,6 +94,10 @@ abstract class Plugin
         }
     }
 
+    public function getClassName(){
+        return get_called_class();
+    }
+    
     abstract protected function initializeRouter();
 
 }

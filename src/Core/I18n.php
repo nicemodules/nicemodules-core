@@ -48,5 +48,10 @@ abstract class I18n
     {
         return $this->language != self::DEFAULT_LANGUAGE;
     }
+    
+    public function hasServiceEnabled():bool
+    {
+        return $this->service !== null;
+    }
 
 }

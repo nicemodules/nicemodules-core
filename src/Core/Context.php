@@ -61,7 +61,7 @@ class Context extends Singleton
     /**
      * @return InterfaceI18n
      */
-    public function getInterfaceTranslator(): InterfaceI18n
+    public function getInterfaceI18n(): InterfaceI18n
     {
         if(!isset($this->interfaceI18n)){
             $locales = new Locales(); 

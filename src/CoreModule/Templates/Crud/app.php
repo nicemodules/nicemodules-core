@@ -96,9 +96,10 @@ $crud = json_encode($crud);
 
                             </template>
 
-                            <v-dialog v-model="confirm" max-width="500px">
+                            <v-dialog v-model="confirm" max-width="800px">
                                 <v-card>
-                                    <v-card-title class="text-h5"> {{ calledAction.confirm }}
+                                    <v-card-title justify="center"> 
+                                        <v-col cols="12" class="text-center">{{ calledAction.confirm }}</v-col>
                                     </v-card-title>
                                     <v-card-actions>
                                         <v-spacer></v-spacer>

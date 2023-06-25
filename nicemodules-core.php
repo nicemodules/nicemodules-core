@@ -25,8 +25,9 @@ function niceModulesCoreInstall(){
     
     $installer = new NiceModules\Core\Installer();
     $installer->addModel(NiceModules\CoreModule\Model\Configuration::class);
-    $installer->addModel(NiceModules\Core\Model\Log::class);
-    $installer->addModel(NiceModules\Core\Model\Language::class);
+    $installer->addModel(NiceModules\CoreModule\Model\ConfigurationI18n::class);
+    $installer->addModel(NiceModules\CoreModule\Model\Log::class);
+    $installer->addModel(NiceModules\CoreModule\Model\Language::class);
     $installer->installDatabase();
     $installer->logOutput();
 }

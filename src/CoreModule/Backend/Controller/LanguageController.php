@@ -40,7 +40,7 @@ class LanguageController extends CrudController
         
         Manager::instance()->flush();
 
-        $this->setResponse(self::SUCCESS,  Context::instance()->getInterfaceTranslator()->get('The data has been saved correctly'));
+        $this->setResponse(self::SUCCESS,  Context::instance()->getInterfaceI18n()->get('The data has been saved correctly'));
         $this->renderJsonResponse();
     }
 }
