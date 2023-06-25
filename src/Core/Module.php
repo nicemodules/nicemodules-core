@@ -41,7 +41,7 @@ abstract class Module extends Singleton
     public function getLogDir()
     {
         $dir = implode(DIRECTORY_SEPARATOR, [
-            $this->getModuleDir(),
+            $this->getPluginDir(),
             'log',
         ]);
 
