@@ -3,11 +3,11 @@
 namespace NiceModules\CoreModule\Backend\Controller;
 
 
-use NiceModules\Core\Controller\CrudController;
+use NiceModules\Core\Controller\I18nCrudController;
 use NiceModules\CoreModule\Model\Configuration;
 
 
-class ConfigurationController extends CrudController
+class ConfigurationController extends I18nCrudController
 {
     protected string $modelClass = Configuration::class;
 }

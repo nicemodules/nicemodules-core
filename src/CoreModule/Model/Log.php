@@ -39,7 +39,7 @@ class Log extends Model
 
     /**
      * @Column(type="datetime", null="NOT NULL")
-     * @CrudField(label="Added", type="date_time", editable=false)
+     * @CrudField(label="Added", type="date-time", editable=false)
      */
     protected string $date_add;
 

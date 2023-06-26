@@ -10,14 +10,14 @@ use NiceModules\Core\Repository;
 use NiceModules\ORM\Manager;
 use NiceModules\ORM\Models\BaseModel;
 
-class I18nRepository extends Repository
+class I18nModelRepository extends Repository
 {
     protected OrmI18n $i18n;
-    
+
     public function translateObject(i18nModel $object)
     {
         $this->i18n = Context::instance()->getOrmI18n();
-        
+
         if (!$this->i18n->hasServiceEnabled()) {
             return;
         }
@@ -27,7 +27,7 @@ class I18nRepository extends Repository
             ->getRepository($object->getI18nClassName())
             ->createQueryBuilder()
             ->where('object_id', $object->getId())
-            ->where('language', $this->i18n->getActiveLanguages(), 'IN')
+            ->where('language', $this->i18n->getActiveLanguagesArray(), 'IN')
             ->where('language', $this->i18n->getLanguage(), '!=')
             ->buildQuery()
             ->getResult();
@@ -37,12 +37,11 @@ class I18nRepository extends Repository
         foreach ($objectI18ns as $objectI18n) {
             $objectI18nsByLanguage[$objectI18n->get('language')] = $objectI18n;
         }
-        
 
-        // Create new i18ns if needed
-        foreach ($this->i18n->getActiveLanguages() as $language) {
+        //Create new i18ns if needed
+        foreach ($this->i18n->getActiveLanguagesArray() as $language) {
             if ($language !== OrmI18n::DEFAULT_LANGUAGE
-                && !isset($objectI18nsByLanguage[$language]) 
+                && !isset($objectI18nsByLanguage[$language])
                 && $language !== $this->i18n->getLanguage()) {
                 $i18nClassName = $object->getI18nClassName();
                 $objectI18nsByLanguage[$language] = new $i18nClassName();
@@ -51,19 +50,17 @@ class I18nRepository extends Repository
                 Manager::instance()->persist($objectI18nsByLanguage[$language]);
             }
         }
-        
-        
+
         if (!$this->i18n->needTranslation()) {
-            //translate only object i18ns - default values are set
-            foreach ($objectI18nsByLanguage as $language => $i18nObject){
+            //translate only object i18ns - default values are already set
+            foreach ($objectI18nsByLanguage as $language => $i18nObject) {
                 foreach ($object->getI18nProperties() as $property) {
                     // translation needed only for text type properties
-                    
-               
+
                     if (!$object->needTranslation($property)) {
                         continue;
                     }
-                    
+
                     //proceed translation from default language to i18n language
                     $this->translateProperty(
                         $i18nObject,
@@ -74,13 +71,13 @@ class I18nRepository extends Repository
                     );
                 }
             }
-        }else{
+        } else {
             //translate default object values
             foreach ($object->getI18nProperties() as $property) {
                 if (!$object->needTranslation($property)) {
                     continue;
                 }
-                
+
                 //proceed translation from current language
                 $this->translateProperty(
                     $object,
@@ -92,9 +89,8 @@ class I18nRepository extends Repository
             }
 
             //translate objectI18ns
-            foreach ($objectI18nsByLanguage as $language => $i18nObject){
+            foreach ($objectI18nsByLanguage as $language => $i18nObject) {
                 foreach ($object->getI18nProperties() as $property) {
-
                     // translation needed only for text type properties
                     if (!$object->needTranslation($property)) {
                         continue;
@@ -111,21 +107,26 @@ class I18nRepository extends Repository
                 }
             }
         }
+
+        Manager::instance()->flush();
     }
-
-    protected function translateProperty(BaseModel $object, string $property, ?string $text, string $sourceLanguage, string $targetLanguage)
-    {
-
-        
-        if($text === '' || $text === null){
+    
+    protected function translateProperty(
+        BaseModel $object,
+        string $property,
+        ?string $text,
+        string $sourceLanguage,
+        string $targetLanguage
+    ) {
+        if ($text === '' || $text === null) {
             return;
         }
-        
+
         // not empty properties are already translanted 
-        if($object->get($property) !== '' &&  $object->get($property) !== null ){
+        if ($object->get($property) !== '' && $object->get($property) !== null) {
             return;
         }
-        
+
         $object->set($property, $this->i18n->translate($text, $sourceLanguage, $targetLanguage));
     }
 }

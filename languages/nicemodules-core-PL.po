@@ -226,5 +226,17 @@ msgstr "Dane zostały poprawnie usunięte"
 msgid "Configuration values"
 msgstr "Wartości konfiguracji"
 
+msgid "NiceModules Core"
+msgstr "NiceModules Core"
+
+msgid "Flag"
+msgstr "Flaga"
+
+msgid "The language has been changed to English"
+msgstr "Język został zmieniony na angielski"
+
+msgid "The language has been changed to Polish"
+msgstr "Język został zmieniony na polski"
+
 msgid ""
 msgstr ""

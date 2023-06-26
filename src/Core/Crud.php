@@ -2,9 +2,11 @@
 
 namespace NiceModules\Core;
 
+use NiceModules\Core\Annotation\CrudAction;
 use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Crud\CrudTranslation;
+use NiceModules\CoreModule\Model\Language;
 
 class Crud
 {
@@ -13,24 +15,24 @@ class Crud
      * @var CrudField[]
      */
     public array $fields;
-
     /**
      * @var CrudField[]
      */
     public array $filters;
-
     /**
      * @var string[]
      */
     public array $headers;
-
     public array $translation;
-
     public array $uris;
-    
+    public array $selectedLanguage;
+    public CrudAction $languageAction;
+    /**
+     * @var Language[]
+     */
+    public array $languages = [];
 
     protected string $class;
-
 
     public function __construct($modelClassName)
     {
@@ -136,5 +138,23 @@ class Crud
     public function getFilter($proprety): CrudField
     {
         return $this->filters[$proprety];
+    }
+
+    /**
+     * @param Language[] $languages
+     */
+    public function setLanguages(array $languages): void
+    {
+        $this->languages = $languages;
+    }
+
+    public function setSelectedLanguage(array $language)
+    {
+        $this->selectedLanguage = $language;
+    }
+
+    public function setLanguageAction(CrudAction $action)
+    {
+        $this->languageAction = $action;
     }
 }

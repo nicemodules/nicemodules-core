@@ -20,6 +20,7 @@ class CrudOptions
     public array $sortDesc;
     public bool $multiSort = false;
     public bool $bulk = false;
+    public bool $i18n = false;
     
     /**
      * @var \NiceModules\Core\Annotation\CrudItemAction[]

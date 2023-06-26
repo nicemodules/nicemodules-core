@@ -7,18 +7,14 @@ use NiceModules\Core\Context;
 use NiceModules\Core\Controller;
 use NiceModules\Core\Crud;
 use NiceModules\Core\Crud\CrudBuilder;
-use NiceModules\Core\I18n\OrmI18n;
 use NiceModules\Core\Template;
 use NiceModules\Core\Template\TemplateRenderer;
+use NiceModules\CoreModule\CoreModule;
 use NiceModules\ORM\Exceptions\InvalidOperatorException;
 use NiceModules\ORM\Exceptions\PropertyDoesNotExistException;
-use NiceModules\ORM\Exceptions\RepositoryClassNotDefinedException;
-use NiceModules\ORM\Exceptions\RequiredAnnotationMissingException;
-use NiceModules\ORM\Exceptions\UnknownColumnTypeException;
 use NiceModules\ORM\Manager;
 use NiceModules\ORM\Mapper;
 use NiceModules\ORM\QueryBuilder;
-use ReflectionException;
 use stdClass;
 
 /**
@@ -34,7 +30,7 @@ abstract class CrudController extends Controller
     /**
      * @var Template[]
      */
-    protected array $templates;
+    protected array $templates = [];
 
     /**
      * @return string
@@ -48,12 +44,7 @@ abstract class CrudController extends Controller
     {
         return Mapper::instance($this->modelClass);
     }
-
-    public function getOrmI18n(): OrmI18n
-    {
-        return Context::instance()->getOrmI18n();
-    }
-
+    
     protected function render()
     {
         $this->templateRenderer = new TemplateRenderer('');
@@ -76,22 +67,36 @@ abstract class CrudController extends Controller
     {
         $crud = $this->getCrud();
 
-        $crud->addUri('getItems', $this->getAjaxUri('getItems'));
+        $crud->addUri('getItems', $this->getUri('getItems'));
+        
+        $this->templateRenderer->getTemplatesFromDir(
+            CoreModule::instance()->getTemplatesDir().DIRECTORY_SEPARATOR.'Crud',
+            $this->templates,
+            ['app'],
+        );
 
-        $this->templates = [
-            new Template('Crud/edit'),
-            new Template('Crud/filters'),
-            new Template('Crud/item_actions'),
-            new Template('Crud/top_button_actions'),
-            new Template('Crud/bulk_actions'),
-            new Template(
-                'Crud/app',
-                [
-                    'crud' => $crud
-                ]
-            )
-        ];
+        $this->templateRenderer->getTemplatesFromDir(
+            CoreModule::instance()->getTemplatesDir().DIRECTORY_SEPARATOR.'Plain',
+            $this->templates
+        );
 
+        $this->templateRenderer->getTemplatesFromDir(
+            CoreModule::instance()->getTemplatesDir().DIRECTORY_SEPARATOR.'Field',
+            $this->templates
+        );
+
+
+        $appTemplate = new Template(
+            'app',
+            [
+                'crud' => $crud
+            ]
+        );
+
+        $appTemplate->setTemplateDir(CoreModule::instance()->getTemplatesDir().DIRECTORY_SEPARATOR.'Crud');
+
+        $this->templates[] = $appTemplate;
+        
         return $this->templates;
     }
 
@@ -106,17 +111,11 @@ abstract class CrudController extends Controller
     {
         $options = $this->getRequestParameter('options');
         $filters = $this->getRequestParameter('filters');
-
+        
         $queryBuilder = Manager::instance()->getRepository($this->modelClass)->createQueryBuilder();
 
-        if ($this->needTableTranslation()) {
-            $queryBuilder->leftJoin('ID', $this->getTableI18nModelName(), 'object_id');
-            $where = $queryBuilder->getLeftJoinWhere('ID', $this->getTableI18nModelName());
-            $where->addCondition($this->getTableI18nModelName(),'language', $this->getOrmI18n()->getLanguage());
-        }
-
-        if ($filters) {
-            $this->addFilters($filters, $queryBuilder);
+        if($filters){
+            $this->addFilters($filters, $queryBuilder);    
         }
 
         $queryBuilder->limit($options->itemsPerPage, ($options->page - 1) * $options->itemsPerPage);
@@ -148,20 +147,13 @@ abstract class CrudController extends Controller
 
         foreach ($item as $field => $value) {
             if (isset($crudFields[$field]) && $crudFields[$field]->editable) {
-                if ($this->needTableTranslation()) {
-                    $object->setTranslated($field, $value);
-                } else {
-                    $object->set($field, $value);
-                }
+                $object->set($field, $value);
             }
         }
 
         Manager::instance()->flush();
-
-        $this->setResponse(
-            self::SUCCESS,
-            Context::instance()->getInterfaceI18n()->get('The data has been saved correctly')
-        );
+        
+        $this->setResponse(self::SUCCESS,  Context::instance()->getInterfaceTranslator()->get('The data has been saved correctly'));
         $this->renderJsonResponse();
     }
 
@@ -170,29 +162,28 @@ abstract class CrudController extends Controller
         $item = $this->getRequestParameter('subject');
 
         $object = $this->getOrCreateObject($item);
-
-        if ($object && $object->getId()) {
+        
+        if($object && $object->getId()){
             Manager::instance()->remove($object);
             Manager::instance()->flush();
-
+            
             $this->setResponse(self::SUCCESS, $this->interfaceI18n->get('The data has been deleted correctly'));
             $this->renderJsonResponse();
-        } else {
+        }else{
             $this->setResponse(self::ERROR, $this->interfaceI18n->get('The data has been deleted correctly'));
             $this->renderJsonResponse();
         }
     }
-
-    public function bulkDelete()
-    {
+    
+    public function bulkDelete(){
         $items = $this->getRequestParameter('subject');
-
+        
         $objects = $this->getSelectedItems($items);
-
-        foreach ($objects as $object) {
+        
+        foreach ($objects as $object){
             Manager::instance()->remove($object);
         }
-
+        
         Manager::instance()->flush();
 
         $this->setResponse(self::SUCCESS, $this->interfaceI18n->get('The data has been deleted correctly'));
@@ -202,39 +193,23 @@ abstract class CrudController extends Controller
     /**
      * @param stdClass[] $items
      * @return array
-     * @throws RepositoryClassNotDefinedException
-     * @throws RequiredAnnotationMissingException
-     * @throws UnknownColumnTypeException
-     * @throws ReflectionException
      */
-    public function getSelectedItems(array $items)
-    {
+    public function getSelectedItems(array $items){
         $ids = [];
-
-        foreach ($items as $item) {
+        
+        foreach ($items as $item){
             $ids[] = $item->ID;
         }
-
+        
         $objects = Manager::instance()->getRepository($this->modelClass)->findIds($ids);
-
+        
         return $objects;
     }
-
+    
     protected function getOrCreateObject(stdClass $item)
     {
         if ($item->ID) {
-            $queryBuilder = Manager::instance()->getRepository($this->modelClass)
-                ->createQueryBuilder();
-            
-            if ($this->needTableTranslation()) {
-                $queryBuilder->leftJoin('ID', $this->getTableI18nModelName(), 'object_id');
-                $where = $queryBuilder->getLeftJoinWhere('ID', $this->getTableI18nModelName());
-                $where->addCondition($this->getTableI18nModelName(), 'language', $this->getOrmI18n()->getLanguage());
-            }
-            
-            $queryBuilder->where('ID', $item->ID);
-            
-            return $queryBuilder->buildQuery()->getSingleResult();
+            return Manager::instance()->getRepository($this->modelClass)->find($item->ID);
         } else {
             $object = new $this->modelClass();
             Manager::instance()->persist($object);
@@ -250,51 +225,42 @@ abstract class CrudController extends Controller
      */
     protected function addFilters(stdClass $filters, QueryBuilder $queryBuilder)
     {
-        foreach ($filters as $filter) {
-            if ($filter->value) {
-                switch ($filter->type) {
-                    case CrudField::TYPE_DATE:
-                    case CrudField::TYPE_DATE_TIME:
-                        {
-                            $timeFrom = '00:00:00';
-                            $timeTo = '23:59:59';
+            foreach ($filters as $filter) {
+                if ($filter->value) {
+                    switch ($filter->type) {
+                        case CrudField::TYPE_DATE:
+                        case CrudField::TYPE_DATE_TIME:
+                            {
+                                $timeFrom = '00:00:00';
+                                $timeTo = '23:59:59';
 
-                            if (count($filter->value) == 2) {
-                                $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeFrom, '>=');
-                                $queryBuilder->where($filter->name, $filter->value[1] . ' ' . $timeTo, '<=');
-                            } else {
-                                $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeFrom, '>=');
-                                $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeTo, '<=');
+                                if (count($filter->value) == 2) {
+                                    $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeFrom, '>=');
+                                    $queryBuilder->where($filter->name, $filter->value[1] . ' ' . $timeTo, '<=');
+                                } else {
+                                    $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeFrom, '>=');
+                                    $queryBuilder->where($filter->name, $filter->value[0] . ' ' . $timeTo, '<=');
+                                }
                             }
-                        }
-                        break;
-                    case CrudField::TYPE_TEXT:
-                        {
-                            $words = explode(' ', $filter->value);
-
-                            $value = '%' . implode('%', $words) . '%';
-
-                            if ($this->needPropertyTranslation($filter->name)) {
-                                $where = $queryBuilder->getWhere();
-                                $where->addCondition($this->getTableI18nModelName(), $filter->name, $value, 'LIKE');
-                            } else {
-                                $queryBuilder->where($filter->name, $value, 'LIKE');
+                            break;
+                        case CrudField::TYPE_TEXT:
+                            {
+                                $words = explode(' ', $filter->value);
+                                
+                                if($this->getContext()){
+                                    
+                                }
+                                $queryBuilder->where($filter->name, '%' . implode('%', $words) . '%', 'LIKE');
                             }
-                        }
-                        break;
-                    default:
-                        {
-                            if ($this->needPropertyTranslation($filter->name)) {
-                                $where = $queryBuilder->getWhere();
-                                $where->addCondition($this->getTableI18nModelName(), $filter->name, $filter->value);
-                            } else {
+                            break;
+                        default:
+                            {
                                 $queryBuilder->where($filter->name, $filter->value);
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
             }
-        }
     }
 
     protected function getSort($options)
@@ -318,27 +284,9 @@ abstract class CrudController extends Controller
         return $sort;
     }
 
-    public function getAjaxUri($methodName)
+    public function getUri($methodName)
     {
         $page = Context::instance()->getActivePlugin()->getRouter()->getUri(get_called_class(), $methodName);
         return '?page=' . $page;
-    }
-
-    protected function needTableTranslation()
-    {
-        $table = $this->getMapper()->getTable();
-        return isset($table->custom) && $table->custom['i18n'] && $this->getOrmI18n()->needTranslation();
-    }
-
-    protected function getTableI18nModelName(): ?string
-    {
-        $table = $this->getMapper()->getTable();
-        return $table->custom['i18nModel'] ?? null;
-    }
-
-    protected function needPropertyTranslation($property): ?string
-    {
-        $column = $this->getMapper()->getColumn($property);
-        return isset($column['i18n']) && $column['i18n'] && $this->getOrmI18n()->needTranslation();
     }
 }

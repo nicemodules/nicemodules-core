@@ -1,152 +1,5 @@
 "use strict";
 
-Vue.component('crud-filters', {
-  props: ['filters', 'translation', 'locale'],
-  template: '#crud-filters',
-  data: function data() {
-    return {
-      pickers: {},
-      expandFilters: false,
-      filterClass: 'default--text'
-    };
-  },
-  methods: {
-    clearFilters: function clearFilters() {
-      for (var name in this.filters) {
-        this.filters[name].value = null;
-      }
-      this.filterClass = 'default--text';
-      this.filterItems();
-    },
-    filterItems: function filterItems() {
-      this.$root.getItems();
-    },
-    closePicker: function closePicker(ref) {
-      this.pickers[ref] = false;
-    },
-    clearPicker: function clearPicker(ref) {
-      this.filters[ref].value = '';
-      this.pickers[ref] = false;
-    },
-    changeFilter: function changeFilter(filter) {
-      this.checkFiltersActive();
-    },
-    checkFiltersActive: function checkFiltersActive() {
-      for (var name in this.filters) {
-        if (this.filters[name].value) {
-          this.filterClass = 'primary--text';
-          return;
-        }
-      }
-      this.filterClass = 'default--text';
-    }
-  },
-  mounted: function mounted() {
-    for (var name in this.filters) {
-      if (this.filters[name].value) {
-        this.expandFilters = true;
-      }
-      if (this.filters[name].type === 'date') {
-        this.pickers[name] = false;
-      }
-    }
-    this.checkFiltersActive();
-  },
-  watch: {}
-});
-"use strict";
-
-Vue.component('crud-edit', {
-  props: ['translation', 'fields', 'action', 'edit', 'locale'],
-  template: '#crud-edit',
-  data: function data() {
-    return {
-      item: {},
-      editActive: false
-    };
-  },
-  methods: {
-    save: function save(item) {
-      this.$root.calledAction.subject = item;
-      this.$root.callAction();
-      this.editActive = false;
-    },
-    cancel: function cancel() {
-      this.editActive = false;
-    }
-  },
-  watch: {
-    edit: {
-      handler: function handler() {
-        this.item = this.edit ? Object.assign({}, this.action().subject) : {};
-        if (this.edit) {
-          this.editActive = true;
-        }
-      }
-    },
-    editActive: {
-      handler: function handler() {
-        if (!this.editActive) {
-          this.$root.edit = false;
-        }
-      }
-    }
-  }
-});
-"use strict";
-
-Vue.component('crud-item-actions', {
-  props: ['item', 'actions'],
-  template: '#crud-item-actions',
-  data: function data() {
-    return {};
-  },
-  methods: {
-    itemAction: function itemAction(item, action) {
-      this.$root.executeAction(item, action);
-    }
-  },
-  mounted: function mounted() {},
-  watch: {}
-});
-"use strict";
-
-Vue.component('crud-top-button-actions', {
-  props: ['item', 'actions'],
-  template: '#crud-top-button-actions',
-  data: function data() {
-    return {};
-  },
-  methods: {
-    buttonAction: function buttonAction(action) {
-      this.$root.executeAction({}, action);
-    }
-  },
-  mounted: function mounted() {},
-  watch: {}
-});
-"use strict";
-
-Vue.component('crud-bulk-actions', {
-  props: ['translation', 'actions'],
-  template: '#crud-bulk-actions',
-  data: function data() {
-    return {};
-  },
-  methods: {
-    buttonAction: function buttonAction(action) {
-      if (!this.$root.selectedItems.length) {
-        this.$root.snackbarError([this.translation.messages.unselected]);
-        return;
-      }
-      this.$root.executeAction(this.$root.selectedItems, action);
-    }
-  },
-  mounted: function mounted() {},
-  watch: {}
-});
-"use strict";
-
 var NiceModulesCrudApp = {
   debug: true,
   run: function run(params) {
@@ -188,6 +41,9 @@ var NiceModulesCrudApp = {
         confirm: false,
         calledAction: {},
         selectedItems: [],
+        languages: crud.languages,
+        selectedLanguage: crud.selectedLanguage,
+        languageAction: crud.languageAction,
         snackbars: {
           success: {
             text: '',
@@ -206,6 +62,7 @@ var NiceModulesCrudApp = {
       beforeMount: function beforeMount() {},
       mounted: function mounted() {
         this.hasFilters = Object.keys(this.filters).length;
+        console.log(this.languages);
       },
       methods: {
         executeAction: function executeAction(subject, action) {
@@ -239,7 +96,7 @@ var NiceModulesCrudApp = {
             type: 'POST',
             dataType: 'json',
             success: function success(data) {
-              crudApp.log('RESPOSE:');
+              crudApp.log('RESPONSE:');
               crudApp.log(data);
               if (data.status === self.status.success) {
                 self.snackbarSuccess(data.messages);

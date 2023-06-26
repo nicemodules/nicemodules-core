@@ -11,6 +11,8 @@
             <v-card-text>
                 <v-row>
                     <template v-for="field of fields">
+                        
+                        
                         <template v-if="field.type === 'text'">
                             <v-col cols="12" sm="6">
                                 <v-text-field v-model="item[field.name]" :label="field.label"></v-text-field>
@@ -89,4 +91,45 @@
         </v-card>
     </v-dialog>
 
+</script>
+
+
+<script>
+    Vue.component('crud-edit', {
+        props: ['translation', 'fields', 'action', 'edit', 'locale'],
+        template: '#crud-edit',
+        data: function () {
+            return {
+                item: {},
+                editActive: false,
+            };
+        },
+        methods: {
+            save(item) {
+                this.$root.calledAction.subject = item;
+                this.$root.callAction()
+                this.editActive = false;
+            },
+            cancel() {
+                this.editActive = false;
+            }
+        },
+        watch: {
+            edit: {
+                handler() {
+                    this.item = this.edit ? Object.assign({}, this.action().subject) : {};
+                    if(this.edit){
+                        this.editActive = true
+                    }
+                }
+            },
+            editActive: {
+                handler() {
+                    if(!this.editActive){
+                        this.$root.edit = false;
+                    }
+                }
+            }
+        },
+    });
 </script>

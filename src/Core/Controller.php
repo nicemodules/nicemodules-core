@@ -100,4 +100,10 @@ abstract class Controller
                 $_SERVER['HTTP_X_REQUESTED_WITH']
             ) == 'xmlhttprequest';
     }
+    
+    public function redirect(string $url): void
+    {
+        wp_redirect($url);
+        exit();
+    }
 }

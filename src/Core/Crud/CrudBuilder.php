@@ -3,12 +3,14 @@
 namespace NiceModules\Core\Crud;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use NiceModules\Core\Annotation\CrudAction;
 use NiceModules\Core\Annotation\CrudField;
 use NiceModules\Core\Annotation\CrudOptions;
 use NiceModules\Core\Context;
 use NiceModules\Core\Controller\CrudController;
 use NiceModules\Core\Crud;
 use NiceModules\Core\I18n\InterfaceI18n;
+use NiceModules\ORM\Mapper;
 use ReflectionClass;
 use ReflectionException;
 
@@ -57,9 +59,19 @@ class CrudBuilder
         // Set crud options
         $options->title = $this->interfaceI18n->get($options->title);
 
-        $this->processItemActions($options->itemActions);
-        $this->processTopButtonActions($options->topButtonActions);
-        $this->processBulkActions($options->bulkActions);
+        $this->processActions($options->itemActions);
+        $this->processActions($options->topButtonActions);
+        $this->processActions($options->bulkActions);
+
+        if (Mapper::instance($this->class)->getCustom('i18n')) {
+            $this->crud->setLanguages(Context::instance()->getOrmI18n()->getActiveLanguages());
+            $this->crud->setSelectedLanguage(Context::instance()->getOrmI18n()->getSelectedLanguage());
+            $action = $this->createAction(
+                'selectLanguage',
+            );
+            $this->processAction($action);
+            $this->crud->setLanguageAction($action);
+        }
 
         $fields = [];
         $filters = [];
@@ -104,40 +116,43 @@ class CrudBuilder
         $this->crud->setHeaders($headers);
     }
 
-    protected function processItemActions(array $itemActions)
-    {
-        foreach ($itemActions as $itemAction) {
-            $itemAction->uri = $this->controller->getAjaxUri($itemAction->name);
 
-            if (isset($itemAction->confirm) && $itemAction->confirm) {
-                $itemAction->confirm = $this->interfaceI18n->get($itemAction->confirm);
-                $itemAction->label = $this->interfaceI18n->get($itemAction->label);
-            }
+    protected function processActions(array $actions)
+    {
+        foreach ($actions as $action) {
+            $this->processAction($action);
         }
     }
 
-    protected function processTopButtonActions(array $topButtonActions)
+    protected function processAction($action)
     {
-        foreach ($topButtonActions as $topButtonAction) {
-            $topButtonAction->uri = $this->controller->getAjaxUri($topButtonAction->name);
+        $action->uri = $this->controller->getUri($action->name);
 
-            if (isset($topButtonAction->confirm) && $topButtonAction->confirm) {
-                $topButtonAction->confirm = $this->interfaceI18n->get($topButtonAction->confirm);
-                $topButtonAction->label = $this->interfaceI18n->get($topButtonAction->label);
-            }
+        if (isset($action->confirm) && $action->confirm) {
+            $action->confirm = $this->interfaceI18n->get($action->confirm);
+            $action->label = $this->interfaceI18n->get($action->label);
         }
     }
 
-    protected function processBulkActions(array $bulkActions)
-    {
-        foreach ($bulkActions as $bulkAction) {
-            $bulkAction->uri = $this->controller->getAjaxUri($bulkAction->name);
-
-            if (isset($bulkAction->confirm) && $bulkAction->confirm) {
-                $bulkAction->confirm = $this->interfaceI18n->get($bulkAction->confirm);
-                $bulkAction->label = $this->interfaceI18n->get($bulkAction->label);
-            }
-        }
+    protected function createAction(
+        string $name,
+        string $type = '',
+        string $color = '',
+        string $label = '',
+        string $icon= '',
+        string $uri = '',
+        string $confirm = ''
+    ) {
+        $action = new CrudAction();
+        $action->name = $name;
+        $action->type = $type;
+        $action->color = $color;
+        $action->label = $label;
+        $action->icon = $icon;
+        $action->uri = $uri;
+        $action->confirm = $confirm;
+        
+        return $action;
     }
 
     protected function getReader(): AnnotationReader

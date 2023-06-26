@@ -2,7 +2,10 @@
 
 namespace NiceModules\Core\Template;
 
+use DirectoryIterator;
 use NiceModules\Core\Template;
+use NiceModules\CoreModule\CoreModule;
+use Symfony\Component\Finder\SplFileInfo;
 
 class TemplateRenderer
 {
@@ -47,6 +50,24 @@ class TemplateRenderer
     public function getTemplates(): array
     {
         return $this->templates;
+    }
+    
+    public function getTemplatesFromDir($dir, array &$templates = [],  array $exclude = []){
+        $directoryIterator = new DirectoryIterator($dir);
+
+        foreach ($directoryIterator as $file) {
+            /** @var SplFileInfo $file */
+            if ($file->isFile()) {
+                $fileName = $file->getBasename('.' . $file->getExtension());
+                if(!in_array($fileName, $exclude)){
+                    $template = new Template($fileName);
+                    $template->setTemplateDir($dir);
+                    $templates[] = $template;    
+                }
+            }
+        }
+        
+        return $templates;
     }
 
 }

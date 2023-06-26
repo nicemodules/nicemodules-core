@@ -15,7 +15,7 @@ class CrudField
     const TYPE_RADIO = 'radio';
     const TYPE_SELECT = 'select';
     const TYPE_DATE = 'date';
-    const TYPE_DATE_TIME = 'date_time';
+    const TYPE_DATE_TIME = 'date-time';
 
     public string $label;
     public string $name;

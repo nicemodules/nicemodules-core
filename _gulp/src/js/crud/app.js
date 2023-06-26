@@ -32,11 +32,15 @@ const NiceModulesCrudApp = {
                 filters: crud.filters,
                 hasFilters: false,
                 translation: crud.translation,
+                locale: crud.locale,
                 deleteDialog: false,
                 edit: false,
                 confirm: false,
                 calledAction: {},
                 selectedItems: [],
+                languages: crud.languages,
+                selectedLanguage: crud.selectedLanguage,
+                languageAction: crud.languageAction,
                 snackbars: {
                     success: {
                         text: '',
@@ -57,6 +61,8 @@ const NiceModulesCrudApp = {
             },
             mounted() {
                 this.hasFilters = Object.keys(this.filters).length;
+                
+                console.log(this.languages);
             },
             methods: {
                 executeAction(subject, action) {
@@ -92,7 +98,7 @@ const NiceModulesCrudApp = {
                         type: 'POST',
                         dataType: 'json',
                         success: function (data) {
-                            crudApp.log('RESPOSE:');
+                            crudApp.log('RESPONSE:');
                             crudApp.log(data);
 
                             if (data.status === self.status.success) {

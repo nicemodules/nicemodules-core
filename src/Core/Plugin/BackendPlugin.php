@@ -5,6 +5,7 @@ namespace NiceModules\Core\Plugin;
 use NiceModules;
 use NiceModules\Core\Context;
 use NiceModules\Core\Installer;
+use NiceModules\Core\Logger;
 use NiceModules\Core\Module;
 use NiceModules\Core\Plugin;
 use NiceModules\Core\Router\BackendRouter;

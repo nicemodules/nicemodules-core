@@ -2,7 +2,7 @@
 
 namespace NiceModules\Core\Annotation;
 
-abstract class CrudAction
+class CrudAction
 {
     /**
      * @var string - Actually name of crud controller method to handle action

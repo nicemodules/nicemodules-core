@@ -54,6 +54,11 @@ class Language extends Model
      * @CrudField(label="Active", type="checkbox", editable=true, filterable=false)
      */
     protected bool $active;
-    
+
+    /**
+     * @Column(type="varchar", length="10")
+     * @CrudField(label="Flag", type="flag-icon", editable=false, filterable=false)
+     */
+    protected ?string $flag;
     
 }

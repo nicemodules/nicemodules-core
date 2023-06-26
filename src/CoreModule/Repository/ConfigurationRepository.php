@@ -2,9 +2,9 @@
 
 namespace NiceModules\CoreModule\Repository;
 
-use NiceModules\Core\Repository\I18nRepository;
+use NiceModules\Core\Repository\I18nModelRepository;
 
-class ConfigurationRepository extends I18nRepository
+class ConfigurationRepository extends I18nModelRepository
 {
 
 }

@@ -87,7 +87,7 @@ class i18nModel extends Model
                 $values['relatedObjects'][$property][$modelName] = $object->getAllValues();
             }
         }
-
+        
         return $values;
     }
 
@@ -139,8 +139,6 @@ class i18nModel extends Model
                 Manager::instance()->persist($this->getI18n());
             }
         }
-
-        Manager::instance()->getRepository($this->getClassName())->translateObject($this);
     }
 
     /**
@@ -154,8 +152,7 @@ class i18nModel extends Model
 
     public function isI18n($property)
     {
-        $column = $this->getMapper()->getColumn($property);
-        return isset($column->custom['i18n']) && $column->custom['i18n'];
+        return $this->getMapper()->getPropertyCustom($property, 'i18n');
     }
 
     /**
