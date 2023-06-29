@@ -18,7 +18,6 @@
     }
   ],
   "require": {
-    "composer/composer": "2.5.5",
     "nicemodules/wordpress-orm": ">=2.0.0|dev-master",
     "doctrine/annotations": "^2.0",
     "deeplcom/deepl-php": "^1.4"
