@@ -238,5 +238,8 @@ msgstr "Język został zmieniony na angielski"
 msgid "The language has been changed to Polish"
 msgstr "Język został zmieniony na polski"
 
+msgid "The language has been changed to Czech"
+msgstr "Język został zmieniony na czeski"
+
 msgid ""
 msgstr ""

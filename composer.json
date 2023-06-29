@@ -1,5 +1,6 @@
 {
-  "name": "nicemodules/core",
+  "name": "nicemodules/nicemodules-core",
+  "type": "wordpress-plugin",
   "description": "NiceModules core plugin",
   "keywords": [
     "wordpress",
@@ -7,7 +8,8 @@
     "plugin",
     "template"
   ],
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "license": "WTFPL",
   "authors": [
     {
@@ -17,15 +19,15 @@
   ],
   "require": {
     "composer/composer": "2.5.5",
-    "nicemodules/wordpress-orm": "dev-master",
+    "nicemodules/wordpress-orm": ">=2.0.0|dev-master",
     "doctrine/annotations": "^2.0",
-    "symfony/translation": "^5.4",
     "deeplcom/deepl-php": "^1.4"
   },
   "repositories": [
     {
-      "type": "vcs",
-      "url": "git@github.com:nicemodules/wordpress-orm.git"
+      "type": "composer",
+      "url": "https://composer.nicemodules.pl",
+      "priority": 10
     }
   ],
   "autoload": {
